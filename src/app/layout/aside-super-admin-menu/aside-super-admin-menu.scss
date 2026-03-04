@@ -2,25 +2,36 @@
    VARIABLES
 =================================*/
 :host {
-  --navy:         #0f1f3d;
-  --navy-mid:     #1a3260;
-  --accent:       #3b82f6;
-  --accent-light: #dbeafe;
-  --teal:         #0ea5e9;
-  --danger:       #ef4444;
-  --text-light:   rgb(255, 255, 255);
-  --text-muted:   rgb(179, 213, 245);
-  --sidebar-w:    230px;
+  --navy:           #0f1f3d;
+  --navy-mid:       #1a3260;
+  --navy-hover:     #162d55;
+  --accent:         #3b82f6;
+  --accent-light:   #dbeafe;
+  --teal:           #0ea5e9;
+  --danger:         #ef4444;
+  --text-light:     rgb(255, 255, 255);
+  --text-muted:     rgb(179, 213, 245);
 
-  /* tipografía base = 16px del navegador */
+  /* ── TAMAÑO UNIFICADO DE ICONOS ── */
+  --iconTam:        1.375rem;        /* 22px — cambia aquí para ajustar todos los iconos */
+
+  /* ── ANCHO DEL SIDEBAR ── */
+  --sidebar-w:      230px;
+  --sidebar-w-mini: 64px;           /* solo iconos */
+
+  /* ── TRANSICIÓN GLOBAL ── */
+  --sidebar-transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.22s ease;
+
   font-size: 1rem;
+  display: block;
 }
 
 /* ===============================
    SIDEBAR CONTAINER
 =================================*/
 .sidebar {
-  width: var(--sidebar-w);
+  width: var(--sidebar-w-mini);     /* colapso por defecto */
   height: 100vh;
   background: var(--navy);
   display: flex;
@@ -29,8 +40,15 @@
   left: 0;
   top: 0;
   z-index: 100;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
   overflow: hidden;
+  transition: var(--sidebar-transition);
+}
+
+/* Sidebar expandido: hover sobre el aside O clase .expanded desde TS */
+.sidebar:hover,
+.sidebar.expanded {
+  width: var(--sidebar-w);
 }
 
 /* ===============================
@@ -38,28 +56,36 @@
 =================================*/
 .sidebar-logo {
   flex-shrink: 0;
-  padding: 1.625rem 1.25rem 1.25rem; /* 26px 20px 20px */
+  padding: 1.5rem 0;
   display: flex;
   align-items: center;
-  gap: 0.75rem;                       /* 12px */
+  justify-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
 }
 
 .logo-icon {
-  width: 100%;
-  height: 6.25rem;                    /* 100px */
-  border-radius: 0.75rem;             /* 12px */
+  min-width: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
   background-image: url('/img/logo.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 
-.logo-text {
-  color: white;
-  font-size: 1.0625rem;              /* 17px */
-  font-weight: 700;
-  letter-spacing: 0.03125rem;        /* 0.5px */
+/* Logo grande cuando expandido */
+.sidebar:hover .logo-icon,
+.sidebar.expanded .logo-icon {
+  min-width: 100%;
+  width: 100%;
+  height: 6rem;
+  border-radius: 0.75rem;
+  padding: 0 1.25rem;
+  box-sizing: border-box;
 }
 
 /* ===============================
@@ -67,25 +93,64 @@
 =================================*/
 .sidebar-admin {
   flex-shrink: 0;
-  padding: 1rem 1.25rem;             /* 16px 20px */
+  padding: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+/* Avatar compacto en modo mini */
+.admin-avatar-mini {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.3);
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #93c5fd;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin: 0 auto;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
 }
 
 .admin-badge {
   background: rgba(59, 130, 246, 0.15);
   border: 1px solid rgba(59, 130, 246, 0.35);
-  border-radius: 0.5rem;             /* 8px */
-  padding: 0.5rem 0.75rem;           /* 8px 12px */
-  font-size: 0.75rem;                /* 12px */
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
   color: #93c5fd;
+  white-space: nowrap;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.22s ease 0.08s, max-height 0.28s ease;
+  pointer-events: none;
 }
 
 .admin-badge strong {
   display: block;
   color: white;
-  font-size: 0.8125rem;              /* 13px */
+  font-size: 0.8125rem;
   font-weight: 600;
-  margin-bottom: 0.125rem;           /* 2px */
+  margin-bottom: 0.125rem;
+}
+
+/* Mostrar badge expandido */
+.sidebar:hover .admin-badge,
+.sidebar.expanded .admin-badge {
+  opacity: 1;
+  max-height: 5rem;
+  pointer-events: auto;
+}
+
+/* Ocultar avatar mini cuando expandido */
+.sidebar:hover .admin-avatar-mini,
+.sidebar.expanded .admin-avatar-mini {
+  display: none;
 }
 
 /* ===============================
@@ -95,24 +160,16 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
-.sidebar-scroll::-webkit-scrollbar {
-  width: 0.25rem;                    /* 4px */
-}
-
-.sidebar-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+.sidebar-scroll::-webkit-scrollbar { width: 0.25rem; }
+.sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
 .sidebar-scroll::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 0.25rem;
 }
-
 .sidebar-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
 }
@@ -121,17 +178,45 @@
    NAVIGATION
 =================================*/
 .sidebar-nav {
-  padding: 0.875rem 0;               /* 14px */
+  padding: 0.875rem 0;
 }
 
+/* Etiqueta de sección */
 .nav-section {
-  padding: 0.375rem 1.125rem;        /* 6px 18px */
-  font-size: 0.6875rem;              /* 11px — label de sección, intencionalmente pequeño */
-  font-weight: 600;
+  padding: 0.375rem 0;
+  font-size: 0.6rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.0625rem;        /* 1px */
+  letter-spacing: 0.08em;
   color: var(--text-muted);
-  margin-top: 0.75rem;               /* 12px */
+  margin-top: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+
+  /* Línea divisoria compacta en modo mini */
+  &::before {
+    content: '';
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 auto 0.25rem;
+  }
+
+  /* Texto de la sección oculto en mini */
+  .section-label {
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    display: block;
+    padding: 0 1.125rem;
+    text-align: left;
+  }
+}
+
+.sidebar:hover .nav-section .section-label,
+.sidebar.expanded .nav-section .section-label {
+  opacity: 1;
 }
 
 /* ===============================
@@ -140,55 +225,133 @@
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;                      /* 12px */
-  padding: 0.625rem 1.25rem;         /* 10px 20px */
-  font-size: 0.9375rem;              /* 15px — tamaño de texto del menú */
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  padding-left: calc((var(--sidebar-w-mini) - var(--iconTam)) / 2);
+  font-size: 0.9375rem;
   font-weight: 400;
   color: var(--text-light);
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: background 0.18s ease, border-left-color 0.18s ease, padding-left 0.32s cubic-bezier(0.4,0,0.2,1);
   text-decoration: none;
   border-left: 3px solid transparent;
   position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Indicador izquierdo activo: línea blanca brillante */
+.nav-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: transparent;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover — indicador sutil */
+.nav-item:hover::before {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Activo — línea blanca luminosa */
+.nav-item.active::before {
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+/* Padding izquierdo expandido */
+.sidebar:hover .nav-item,
+.sidebar.expanded .nav-item {
+  padding-left: 1.25rem;
 }
 
 /* ===============================
-   ICONOS
-=================================*/
-.icon {
-  width: 1.25rem;                    /* 20px */
-  height: 1.25rem;
-  flex-shrink: 0;
-  filter: brightness(0) invert(1);
-  transition: filter 0.18s ease;
-}
-
-.icon-sub {
-  width: 1.5625rem;                  /* 25px */
-  height: 1.5625rem;
-  flex-shrink: 0;
-  filter: brightness(0) invert(1);
-  opacity: 0.75;
-}
-
-/* ===============================
-   ESTADOS HOVER / ACTIVE
+   HOVER DEL NAV ITEM
 =================================*/
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.09);
   color: white;
 }
 
+/* Efecto shimmer al hover */
+.nav-item:hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  animation: shimmer 0.5s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
 .nav-item.active {
-  background: rgba(59, 130, 246, 0.15);
-  color: #93c5fd;
-  border-left-color: var(--accent);
+  background: rgba(59, 130, 246, 0.18);
+  color: #bfdbfe;
+  border-left-color: transparent; /* usamos ::before */
   font-weight: 600;
 }
 
 .nav-item.active .icon {
   filter: brightness(0) saturate(100%) invert(72%) sepia(50%)
           saturate(400%) hue-rotate(195deg) brightness(105%);
+}
+
+/* ===============================
+   TEXTO NAV (oculto en mini)
+=================================*/
+.nav-item span {
+  opacity: 0;
+  transition: opacity 0.18s ease 0.06s;
+  pointer-events: none;
+}
+
+.sidebar:hover .nav-item span,
+.sidebar.expanded .nav-item span {
+  opacity: 1;
+}
+
+/* ===============================
+   ICONOS — tamaño unificado
+=================================*/
+.icon {
+  width: var(--iconTam);
+  height: var(--iconTam);
+  min-width: var(--iconTam);
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+
+.icon-sub {
+  width: var(--iconTam);
+  height: var(--iconTam);
+  min-width: var(--iconTam);
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+  opacity: 0.75;
+  transition: filter 0.18s ease;
+}
+
+.nav-item:hover .icon {
+  transform: scale(1.1);
+}
+
+/* Icono auditoria más grande sin romper el centrado */
+.icon--auditoria {
+  transform: scale(1.55);
+}
+
+.nav-item:hover .icon--auditoria {
+  transform: scale(1.65);
 }
 
 /* ===============================
@@ -201,18 +364,26 @@
 .nav-main {
   display: flex;
   align-items: center;
-  gap: 0.75rem;                      /* 12px */
+  gap: 0.75rem;
 }
 
 .arrow {
-  width: 1rem;                       /* 16px */
+  width: 1rem;
   height: 1rem;
   stroke: var(--text-light);
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, opacity 0.18s ease;
+  flex-shrink: 0;
+  opacity: 0;
+  margin-right: 0.75rem;
 }
 
 .arrow.rotate {
   transform: rotate(180deg);
+}
+
+.sidebar:hover .arrow,
+.sidebar.expanded .arrow {
+  opacity: 1;
 }
 
 /* ===============================
@@ -221,23 +392,48 @@
 .submenu {
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.2s ease;
+  background: rgba(0, 0, 0, 0.18);
+  animation: fadeDown 0.2s ease;
+  overflow: hidden;
 }
 
 .nav-subitem {
   display: flex;
   align-items: center;
-  gap: 0.625rem;                     /* 10px */
-  padding: 0.5rem 1.25rem 0.5rem 2.75rem; /* 8px 20px 8px 44px */
-  font-size: 0.9375rem;              /* 15px — igual que item padre */
+  gap: 0.625rem;
+  padding: 0.5rem 1.25rem 0.5rem 2.75rem;
+  font-size: 0.875rem;
   color: var(--text-light);
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, border-left-color 0.15s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav-subitem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.nav-subitem:hover::before {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.nav-subitem.active::before {
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
 }
 
 .nav-subitem:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
   color: white;
 }
 
@@ -252,15 +448,20 @@
   opacity: 1;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Subitem oculto en modo mini */
+.nav-subitem-text {
+  opacity: 0;
+  transition: opacity 0.18s ease 0.06s;
+}
+
+.sidebar:hover .nav-subitem-text,
+.sidebar.expanded .nav-subitem-text {
+  opacity: 1;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ===============================
@@ -268,13 +469,11 @@
 =================================*/
 .sidebar-bottom {
   flex-shrink: 0;
-  padding: 1rem 0;                   /* 16px */
+  padding: 1rem 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.logout {
-  color: #f87171 !important;
-}
+.logout { color: #f87171 !important; }
 
 .logout .icon {
   filter: brightness(0) saturate(100%) invert(60%)
@@ -282,30 +481,46 @@
 }
 
 .logout:hover {
-  background: rgba(239, 68, 68, 0.12);
+  background: rgba(239, 68, 68, 0.15) !important;
   color: #fca5a5 !important;
-  border-left-color: var(--danger);
+}
+
+.logout:hover::before {
+  background: #f87171 !important;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.6) !important;
 }
 
 /* ===============================
-   RESPONSIVE
+   RESPONSIVE — fuerza mini < 900px
+   y expande solo con clase .expanded
 =================================*/
-@media (max-width: 56.25rem) {       /* 900px */
+@media (max-width: 56.25rem) {
   .sidebar {
-    width: 4.375rem;                 /* 70px */
+    width: var(--sidebar-w-mini);
   }
 
-  .logo-text,
-  .nav-item span,
-  .admin-badge {
-    display: none;
+  /* En móvil el hover de CSS no expande —
+     solo la clase .expanded (toggle con botón) */
+  .sidebar:not(.expanded):hover {
+    width: var(--sidebar-w-mini);
   }
 
-  .nav-subitem {
-    padding-left: 1.25rem;           /* 20px */
+  .sidebar:not(.expanded):hover .nav-item span,
+  .sidebar:not(.expanded):hover .admin-badge,
+  .sidebar:not(.expanded):hover .nav-section .section-label,
+  .sidebar:not(.expanded):hover .arrow {
+    opacity: 0;
+    pointer-events: none;
   }
 
-  .nav-subitem span {
-    display: none;
+  .sidebar:not(.expanded):hover .logo-icon {
+    min-width: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+  }
+
+  .sidebar:not(.expanded):hover .admin-avatar-mini {
+    display: flex;
   }
 }

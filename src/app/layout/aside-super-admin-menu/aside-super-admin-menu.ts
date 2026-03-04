@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -11,31 +11,46 @@ import { CommonModule } from '@angular/common';
 })
 export class AsideSuperAdminMenu {
 
-  /*info obtenida desde backend*/
-  userName = 'Juan Pérez';
-  userRole = 'Super Usuario';
+  /* ── INFO DE USUARIO (obtenida desde backend) ── */
+  userName  = 'Juan Pérez';
+  userRole  = 'Super Usuario';
 
+  /** Iniciales calculadas para el avatar mini */
+  get userInitials(): string {
+    return this.userName
+      .split(' ')
+      .map(w => w[0])
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
+  }
+
+  /* ── ESTADO DEL SIDEBAR (para mobile toggle) ── */
+  sidebarExpanded = false;
+
+  /** Abre/cierra manualmente (útil en mobile con un botón) */
+  toggleSidebar() {
+    this.sidebarExpanded = !this.sidebarExpanded;
+  }
+
+  /* ── SUBMENÚ ESTANCIAS ── */
   estanciasOpen = false;
 
-  /* Click — abre/cierra */
   toggleEstancias() {
     this.estanciasOpen = !this.estanciasOpen;
   }
 
-  /* Hover — abre al entrar el mouse */
   openEstancias() {
     this.estanciasOpen = true;
   }
 
-  /* Hover — cierra al salir el mouse */
   closeEstancias() {
     this.estanciasOpen = false;
   }
 
+  /* ── LOGOUT ── */
   logout() {
     console.log('Cerrar sesión');
-    // Aquí limpias token y rediriges
+    // Limpiar token y redirigir
   }
-
-
 }
