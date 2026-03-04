@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-aside-super-admin-menu',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './aside-super-admin-menu.html',
   styleUrl: './aside-super-admin-menu.scss',
 })
