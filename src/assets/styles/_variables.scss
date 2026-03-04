@@ -1,0 +1,23 @@
+// Paleta ALZAID
+:root {
+  --navy:         #0f1f3d;
+  --navy-mid:     #1a3260;
+  --accent:       #3b82f6;
+  --accent-light: #dbeafe;
+  --teal:         #0ea5e9;
+  --success:      #10b981;
+  --warning:      #f59e0b;
+  --danger:       #ef4444;
+  --bg:           #f0f4f8;
+  --surface:      #ffffff;
+  --border:       #e2e8f0;
+  --text:         #1e293b;
+  --muted:        #64748b;
+  --sidebar-w:    220px;
+}
+
+// También como variables SCSS para usar en mixins
+$navy:    #0f1f3d;
+$accent:  #3b82f6;
+$success: #10b981;
+$danger:  #ef4444;
