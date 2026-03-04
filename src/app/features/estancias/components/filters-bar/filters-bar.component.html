@@ -1,0 +1,38 @@
+<div class="filters-bar">
+
+  <!-- Búsqueda -->
+  <div class="search-box">
+    <span class="material-symbols-outlined search-icon">search</span>
+    <input
+      type="text"
+      placeholder="Buscar por nombre, ciudad o administrador…"
+      [value]="searchValue"
+      (input)="onSearch($event)"
+    />
+  </div>
+
+  <!-- Filtro: Estatus -->
+  <select class="filter-select" [value]="selectedStatus" (change)="onStatusChange($event)">
+    <option value="">Todos los estatus</option>
+    <option value="activa">Activa</option>
+    <option value="inactiva">Inactiva</option>
+    <option value="configuracion">En Configuración</option>
+  </select>
+
+  <!-- Filtro: País -->
+  <select class="filter-select" [value]="selectedCountry" (change)="onCountryChange($event)">
+    <option value="">Todos los países</option>
+    <option value="mexico">México</option>
+    <option value="colombia">Colombia</option>
+    <option value="espana">España</option>
+  </select>
+
+  <!-- Filtro: Estado -->
+  <select class="filter-select" [value]="selectedState" (change)="onStateChange($event)">
+    <option value="">Todos los estados</option>
+    <option value="sonora">Sonora</option>
+    <option value="cdmx">CDMX</option>
+    <option value="jalisco">Jalisco</option>
+  </select>
+
+</div>

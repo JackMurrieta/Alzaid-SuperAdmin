@@ -1,9 +1,14 @@
 import { Routes } from '@angular/router';
-import { AsideSuperAdminMenu } from './layout/aside-super-admin-menu/aside-super-admin-menu';
+import { EstanciasPageComponent } from './features/estancias/pages/estancias-page.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: AsideSuperAdminMenu
-  }
+    redirectTo: 'estancias',
+    pathMatch: 'full',
+  },
+  {
+    path: 'estancias',  // sin la /
+    component: EstanciasPageComponent,
+  },
 ];

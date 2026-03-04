@@ -1,0 +1,111 @@
+/* ══════════════════════════════════════════════════════════════
+   BOTONES COMPARTIDOS — importar en styles.scss o donde se use
+   @use 'ruta/buttons' o incluir en el global styles.scss
+═══════════════════════════════════════════════════════════════*/
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0.5rem 1.125rem;
+  border-radius: 0.5rem;
+  font-size: 0.84375rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  white-space: nowrap;
+  text-decoration: none;
+
+  .material-symbols-outlined {
+    font-size: 1rem;
+    font-variation-settings: 'FILL' 0, 'wght' 500;
+  }
+
+  /* ── Primary — navy ── */
+  &.btn-primary {
+    background: var(--navy);
+    color: white;
+
+    &:hover {
+      background: var(--navy-mid);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(15, 31, 61, 0.28);
+    }
+  }
+
+  /* ── Ghost — borde neutro ── */
+  &.btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+
+    &:hover {
+      background: var(--bg);
+      color: var(--text);
+      border-color: #cbd5e1;
+    }
+  }
+
+  /* ── Success — verde ── */
+  &.btn-success {
+    background: var(--success);
+    color: white;
+
+    &:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+  }
+
+  /* ── Danger — rojo ── */
+  &.btn-danger {
+    background: var(--danger);
+    color: white;
+
+    &:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+    }
+  }
+
+  /* ── Warning — ámbar ── */
+  &.btn-warning {
+    background: var(--warning);
+    color: white;
+
+    &:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    }
+  }
+
+  /* ── Accent — azul ── */
+  &.btn-accent {
+    background: var(--accent);
+    color: white;
+
+    &:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+    }
+  }
+
+  /* Estado deshabilitado (aplica a todos) */
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}

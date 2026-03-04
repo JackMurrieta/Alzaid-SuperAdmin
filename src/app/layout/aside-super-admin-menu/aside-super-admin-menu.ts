@@ -1,6 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SidebarService } from './sidebar.service';
 
 @Component({
   selector: 'app-aside-super-admin-menu',
@@ -11,9 +12,14 @@ import { CommonModule } from '@angular/common';
 })
 export class AsideSuperAdminMenu {
 
+  constructor(public sidebarSvc: SidebarService) { }
+
+  openSidebar() { this.sidebarSvc.expand(); }
+  closeSidebar() { this.sidebarSvc.collapse(); }
+
   /* ── INFO DE USUARIO (obtenida desde backend) ── */
-  userName  = 'Juan Pérez';
-  userRole  = 'Super Usuario';
+  userName = 'Juan Pérez';
+  userRole = 'Super Usuario';
 
   /** Iniciales calculadas para el avatar mini */
   get userInitials(): string {

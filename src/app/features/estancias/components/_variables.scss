@@ -1,0 +1,33 @@
+/* ══════════════════════════════════════════════════════════════
+   VARIABLES GLOBALES — agregar en styles.scss  :root { ... }
+   o en el :root de tu archivo global
+═══════════════════════════════════════════════════════════════*/
+
+:root {
+  --navy:         #0f1f3d;
+  --navy-mid:     #1a3260;
+  --accent:       #3b82f6;
+  --accent-light: #dbeafe;
+  --teal:         #0ea5e9;
+  --success:      #10b981;
+  --warning:      #f59e0b;
+  --danger:       #ef4444;
+  --bg:           #f0f4f8;
+  --surface:      #ffffff;
+  --border:       #e2e8f0;
+  --text:         #1e293b;
+  --muted:        #64748b;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   En index.html agregar en <head> para Google Material Symbols:
+
+   <link rel="stylesheet"
+     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+   Iconos usados por componente:
+   ─ topbar          → add, home
+   ─ stat-card       → domain, check_circle, settings, block
+   ─ filters-bar     → search
+   ─ estancias-table → visibility, edit, delete, chevron_left, chevron_right
+═══════════════════════════════════════════════════════════════*/

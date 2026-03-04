@@ -1,0 +1,34 @@
+<div class="page-layout">
+
+  <app-aside-super-admin-menu />
+
+  <main class="main" [class.expanded]="sidebarSvc.isExpanded()">
+
+    <!-- Topbar -->
+    <app-topbar pageTitle="Estancias de Día" (newEstancia)="onNewEstancia()" />
+
+    <div class="content">
+
+      <!-- Encabezado -->
+      <div class="page-header">
+        <div class="page-title">Estancias de Día</div>
+        <div class="page-subtitle">Administración global de todas las estancias registradas</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-strip">
+        <app-stat-card *ngFor="let s of stats" [icon]="s.icon" [value]="s.value" [label]="s.label" [color]="s.color" />
+      </div>
+
+      <!-- Filtros -->
+      <app-filters-bar (filtersChange)="onFiltersChange($event)" />
+
+      <!-- Tabla -->
+      <app-estancias-table [estancias]="estancias" [totalEstancias]="totalEstancias" [currentPage]="currentPage"
+        [totalPages]="totalPages" (viewEstancia)="onView($event)" (editEstancia)="onEdit($event)"
+        (deleteEstancia)="onDelete($event)" (pageChange)="onPageChange($event)" />
+
+    </div>
+  </main>
+
+</div>
