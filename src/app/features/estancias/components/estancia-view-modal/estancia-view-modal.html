@@ -1,0 +1,117 @@
+<div class="modal-backdrop">
+
+    <div class="modal-container">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+
+            <div>
+                <h2>{{ estancia?.nombre }}</h2>
+                <div class="sub">
+                    #{{ estancia?.id }}
+                    <span class="badge">{{ estancia?.estatus }}</span>
+                </div>
+            </div>
+
+            <button class="close-btn" (click)="closeModal()">✕</button>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body" *ngIf="estancia">
+
+            <!-- INFORMACION GENERAL -->
+            <section class="section">
+                <h3>Información general</h3>
+
+                <div class="grid">
+
+                    <div class="field">
+                        <label>Nombre</label>
+                        <p>{{ estancia.nombre }}</p>
+                    </div>
+
+                    <div class="field">
+                        <label>Fecha de alta</label>
+                        <p>{{ estancia.fechaAlta }}</p>
+                    </div>
+
+                    <div class="field">
+                        <label>Capacidad</label>
+                        <p>{{ estancia.capacidadActual }} / {{ estancia.capacidadMax }}</p>
+                    </div>
+
+                    <div class="field">
+                        <label>Horario</label>
+                        <p>{{ estancia.horario }}</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- UBICACION -->
+            <section class="section">
+                <h3>Ubicación</h3>
+
+                <div class="grid">
+
+                    <div class="field">
+                        <label>País</label>
+                        <p>{{ estancia.pais }}</p>
+                    </div>
+
+                    <div class="field">
+                        <label>Estado</label>
+                        <p>{{ estancia.estado }}</p>
+                    </div>
+
+                    <div class="field">
+                        <label>Ciudad</label>
+                        <p>{{ estancia.ciudad }}</p>
+                    </div>
+
+                    <div class="field">
+                        <label>Colonia</label>
+                        <p>{{ estancia.colonia }}</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ADMIN -->
+            <section class="section">
+                <h3>Administrador</h3>
+
+                <div class="admin-card">
+
+                    <div class="avatar">
+                        {{ getInitials(estancia.administrador) }}
+                    </div>
+
+                    <div>
+                        <div class="admin-name">{{ estancia.administrador }}</div>
+                        <div class="admin-role">Administrador asignado</div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+
+            <button class="btn-secondary" (click)="closeModal()">
+                Cerrar
+            </button>
+
+            <button class="btn-primary">
+                Editar Estancia
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

@@ -7,6 +7,8 @@ import { TopbarComponent } from '../components/topbar/topbar.component';
 import { StatCardComponent } from '../components/stat-card/stat-card.component';
 import { FiltersBarComponent, FiltersState } from '../components/filters-bar/filters-bar.component';
 import { EstanciasTableComponent, Estancia } from '../components/table-component/estancias-table.component';
+import { EstanciaViewModalComponent } from '../components/estancia-view-modal/estancia-view-modal';
+
 
 import { SidebarService } from '../../../layout/aside-super-admin-menu/sidebar.service';
 
@@ -20,6 +22,7 @@ import { SidebarService } from '../../../layout/aside-super-admin-menu/sidebar.s
     StatCardComponent,
     FiltersBarComponent,
     EstanciasTableComponent,
+    EstanciaViewModalComponent
   ],
   templateUrl: './estancias-page.component.html',
   styleUrl: './estancias-page.component.scss',
@@ -62,13 +65,25 @@ export class EstanciasPageComponent {
     console.log('Abrir modal crear');
   }
 
+  //Estado del modal
+  selectedEstancia: Estancia | null = null;
+  showViewModal = false;
+
   onFiltersChange(filters: FiltersState) {
     console.log('Filtros:', filters);
     // Aquí llamas tu servicio con los filtros
   }
 
-  onView(estancia: Estancia) { console.log('Ver:', estancia); }
+  onView(estancia: Estancia) {
+    this.selectedEstancia = estancia;
+    this.showViewModal = true;
+  }
   onEdit(estancia: Estancia) { console.log('Editar:', estancia); }
   onDelete(estancia: Estancia) { console.log('Eliminar:', estancia); }
   onPageChange(page: number) { this.currentPage = page; }
+
+  closeViewModal() {
+    this.showViewModal = false;
+    this.selectedEstancia = null;
+  }
 }

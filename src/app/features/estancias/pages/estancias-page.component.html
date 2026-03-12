@@ -28,6 +28,10 @@
         [totalPages]="totalPages" (viewEstancia)="onView($event)" (editEstancia)="onEdit($event)"
         (deleteEstancia)="onDelete($event)" (pageChange)="onPageChange($event)" />
 
+      <!-- Modal Ver Estancia -->
+      <app-estancia-view-modal *ngIf="showViewModal" [estancia]="selectedEstancia" (close)="closeViewModal()"
+      />
+
     </div>
   </main>
 
