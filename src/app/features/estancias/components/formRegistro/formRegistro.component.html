@@ -1,0 +1,241 @@
+<div class="modal">
+    <div class="modal-header">
+        <div>
+            <div class="modal-title">Registrar Estancia</div>
+            <div class="modal-subtitle">Los campos marcados con * son obligatorios</div>
+        </div>
+        <button class="modal-close" (click)="onCancel()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-body">
+
+        <!-- ── Información básica ── -->
+        <div class="form-section">
+            <div class="form-section-title">Información básica</div>
+            <div class="form-grid form-grid-2">
+
+                <div class="field field-full">
+                    <label>Nombre de la estancia <span class="req">*</span></label>
+                    <input type="text" formControlName="name"
+                        placeholder="Ej. Estancia Alzheimer Dorita de Ojeda, I.A.P.">
+                    <span class="hint error" *ngIf="isInvalid('name')">Este campo es obligatorio</span>
+                </div>
+
+                <div class="field field-full">
+                    <label>Descripción <span class="opt">(opcional)</span></label>
+                    <textarea formControlName="description"
+                        placeholder="Breve descripción de la estancia, servicios, misión…"></textarea>
+                </div>
+
+                <div class="field">
+                    <label>Capacidad máxima <span class="req">*</span></label>
+                    <input type="number" min="1" formControlName="capacidad" placeholder="Ej. 25">
+                    <span class="hint">Número máximo de adultos mayores</span>
+                    <span class="hint error" *ngIf="isInvalid('capacidad')">Ingresa un número válido</span>
+                </div>
+
+                <div class="field">
+                    <label>Estatus inicial</label>
+                    <select formControlName="estatus">
+                        <option value="configuracion">En configuración</option>
+                        <option value="activa">Activa</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Ubicación ── -->
+        <div class="form-section">
+            <div class="form-section-title">Ubicación</div>
+            <div class="form-grid form-grid-3">
+
+                <!-- País (fijo) -->
+                <div class="field">
+                    <label>País <span class="req">*</span></label>
+                    <input type="text" formControlName="country" [readonly]="true" class="input-readonly">
+                </div>
+
+                <!-- Estado -->
+                <div class="field">
+                    <label>Estado <span class="req">*</span></label>
+                    <select formControlName="state">
+                        <option value="">Seleccionar estado…</option>
+                        <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
+                    </select>
+                    <span class="hint error" *ngIf="isInvalid('state')">Selecciona un estado</span>
+                </div>
+
+                <!-- Municipio / City -->
+                <div class="field">
+                    <label>Municipio <span class="req">*</span></label>
+                    <select formControlName="city" [class.disabled]="!municipios.length">
+                        <option value="">
+                            {{ !form.get('state')?.value ? 'Primero selecciona estado' : 'Seleccionar municipio…' }}
+                        </option>
+                        <option *ngFor="let m of municipios" [value]="m">{{ m }}</option>
+                    </select>
+                    <span class="hint error" *ngIf="isInvalid('city')">Selecciona un municipio</span>
+                </div>
+
+            </div>
+
+            <!-- Fila: Calle + Número exterior -->
+            <div class="form-grid form-grid-2" style="margin-top:14px">
+
+                <div class="field">
+                    <label>Calle <span class="req">*</span></label>
+                    <input type="text" formControlName="calle"
+                        placeholder="Ej. Av. Reforma">
+                    <span class="hint error" *ngIf="isInvalid('calle')">Este campo es obligatorio</span>
+                </div>
+
+                <div class="field">
+                    <label>Número exterior <span class="req">*</span></label>
+                    <input type="text" formControlName="numero"
+                        placeholder="Ej. 123 o 45-B">
+                    <span class="hint error" *ngIf="isInvalid('numero')">Este campo es obligatorio</span>
+                </div>
+
+            </div>
+
+            <!-- Fila: Colonia + CP -->
+            <div class="form-grid form-grid-2" style="margin-top:14px">
+
+                <div class="field">
+                    <label>Colonia <span class="opt">(opcional)</span></label>
+                    <input type="text" formControlName="colonia" placeholder="Ej. Col. Centro">
+                </div>
+
+                <div class="field">
+                    <label>Código Postal <span class="opt">(opcional)</span></label>
+                    <div class="input-with-status">
+                        <input type="text" formControlName="codigoPostal" placeholder="Ej. 85000" maxlength="5">
+                        <span class="cp-status success" *ngIf="cpExito">✓</span>
+                        <span class="cp-status error"   *ngIf="cpError">✕</span>
+                    </div>
+                    <span class="hint" *ngIf="!cpError && !cpExito">5 dígitos numéricos</span>
+                    <span class="hint"       *ngIf="cpExito">Formato correcto</span>
+                    <span class="hint error" *ngIf="cpError">El CP debe tener 5 dígitos numéricos</span>
+                </div>
+
+            </div>
+
+            <!-- Vista previa del address que se enviará -->
+            <div class="address-preview"
+                *ngIf="form.get('calle')?.value || form.get('numero')?.value">
+                <span class="address-preview-label">📍 Dirección que se registrará:</span>
+                <span class="address-preview-value">
+                    {{ form.get('calle')?.value }}
+                    <ng-container *ngIf="form.get('numero')?.value">, {{ form.get('numero')?.value }}</ng-container>
+                    <ng-container *ngIf="form.get('colonia')?.value">, {{ form.get('colonia')?.value }}</ng-container>
+                    <ng-container *ngIf="form.get('codigoPostal')?.value">, CP {{ form.get('codigoPostal')?.value }}</ng-container>
+                </span>
+            </div>
+
+        </div>
+
+        <!-- ── Contacto ── -->
+        <div class="form-section">
+            <div class="form-section-title">Contacto</div>
+            <div class="form-grid form-grid-2">
+
+                <div class="field">
+                    <label>Teléfono principal <span class="req">*</span></label>
+                    <input type="tel" formControlName="telefono" placeholder="+52 644 123 4567">
+                    <span class="hint error" *ngIf="isInvalid('telefono')">Este campo es obligatorio</span>
+                </div>
+
+                <div class="field">
+                    <label>Email de contacto <span class="req">*</span></label>
+                    <input type="email" formControlName="email" placeholder="contacto@estancia.com">
+                    <span class="hint error" *ngIf="isInvalid('email')">Ingresa un email válido</span>
+                </div>
+
+                <div class="field">
+                    <label>Teléfono secundario <span class="opt">(opcional)</span></label>
+                    <input type="tel" formControlName="telefonoSecundario" placeholder="+52 644 987 6543">
+                </div>
+
+                <div class="field">
+                    <label>Sitio web <span class="opt">(opcional)</span></label>
+                    <input type="url" formControlName="sitioWeb" placeholder="https://…">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Horario ── -->
+        <div class="form-section">
+            <div class="form-section-title">Horario de operación</div>
+            <div class="form-grid form-grid-2">
+
+                <div class="field">
+                    <label>Hora de apertura <span class="req">*</span></label>
+                    <input type="time" formControlName="horaApertura">
+                    <span class="hint error" *ngIf="isInvalid('horaApertura')">Selecciona una hora</span>
+                </div>
+
+                <div class="field">
+                    <label>Hora de cierre <span class="req">*</span></label>
+                    <input type="time" formControlName="horaCierre">
+                    <span class="hint error" *ngIf="isInvalid('horaCierre')">Selecciona una hora</span>
+                </div>
+
+                <div class="field field-full">
+                    <label>Días de operación <span class="req">*</span></label>
+                    <select formControlName="diasOperacion">
+                        <option value="lunes-viernes">Lunes a Viernes</option>
+                        <option value="lunes-sabado">Lunes a Sábado</option>
+                        <option value="todos">Todos los días</option>
+                        <option value="personalizado">Personalizado</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Administrador ── -->
+        <div class="form-section">
+            <div class="form-section-title">Administrador asignado</div>
+            <div class="note-box" style="background:#f0fdf4;border-color:#bbf7d0;color:#166534;margin-bottom:14px">
+                <strong>💡 Campo opcional</strong>
+                Puedes asignar el administrador ahora o hacerlo más tarde desde la edición de la estancia.
+            </div>
+            <div class="form-grid form-grid-2">
+                <div class="field field-full">
+                    <label>Administrador <span class="opt">(opcional)</span></label>
+                    <select formControlName="administrador">
+                        <option value="">— Sin asignar por ahora —</option>
+                        <option *ngFor="let admin of administradores" [value]="admin.id">{{ admin.nombre }}</option>
+                    </select>
+                    <span class="hint">Solo se muestran administradores disponibles (sin estancia activa o con capacidad)</span>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="modal-footer">
+        <button class="btn btn-ghost" type="button" (click)="onCancel()">Cancelar</button>
+        <button class="btn btn-primary" type="submit" (click)="onSubmit()"
+            [disabled]="form.invalid && formSubmitted">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                style="width:15px;height:15px">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Crear Estancia
+        </button>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" [class.show]="toastVisible">
+    <div class="toast-icon">✓</div>
+    <span>{{ toastMessage }}</span>
+</div>

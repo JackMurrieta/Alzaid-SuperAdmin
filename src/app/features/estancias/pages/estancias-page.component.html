@@ -3,10 +3,8 @@
   <app-aside-super-admin-menu />
 
   <main class="main" [class.expanded]="sidebarSvc.isExpanded()">
-
     <!-- Topbar -->
     <app-topbar pageTitle="Estancias de Día" (newEstancia)="onNewEstancia()" />
-
     <div class="content">
 
       <!-- Encabezado -->
@@ -29,6 +27,14 @@
         (deleteEstancia)="onDelete($event)" (pageChange)="onPageChange($event)" />
 
     </div>
+
   </main>
 
 </div>
+
+<!-- Modal: se agrega FUERA del layout para evitar conflictos de z-index -->
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="onModalCancelado()">
+  <div (click)="$event.stopPropagation()">
+    <app-form-registro (cancelar)="onModalCancelado()" (estanciaCreada)="onEstanciaCreada($event)">
+    </app-form-registro>
+  </div>
