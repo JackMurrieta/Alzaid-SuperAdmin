@@ -5,6 +5,7 @@
   <main class="main" [class.expanded]="sidebarSvc.isExpanded()">
     <!-- Topbar -->
     <app-topbar pageTitle="Estancias de Día" (newEstancia)="onNewEstancia()" />
+
     <div class="content">
 
       <!-- Encabezado -->
@@ -27,18 +28,16 @@
         (deleteEstancia)="onDelete($event)" (pageChange)="onPageChange($event)" />
 
       <!-- Modal Ver Estancia -->
-      <app-estancia-view-modal *ngIf="showViewModal" [estancia]="selectedEstancia" (close)="closeViewModal()"
-      />
+      <app-estancia-view-modal *ngIf="showViewModal" [estancia]="selectedEstancia" (close)="closeViewModal()" />
 
     </div>
-
   </main>
 
 </div>
 
-<!-- Modal: se agrega FUERA del layout para evitar conflictos de z-index -->
+<!-- Modal Crear: fuera del layout para evitar conflictos de z-index -->
 <div class="modal-overlay" *ngIf="mostrarModal" (click)="onModalCancelado()">
   <div (click)="$event.stopPropagation()">
-    <app-form-registro (cancelar)="onModalCancelado()" (estanciaCreada)="onEstanciaCreada($event)">
-    </app-form-registro>
+    <app-form-registro (cancelar)="onModalCancelado()" (estanciaCreada)="onEstanciaCreada($event)" />
   </div>
+</div>

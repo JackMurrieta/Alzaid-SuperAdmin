@@ -12,7 +12,7 @@ export interface Estancia {
   capacidadActual: number;
   capacidadMax: number;
   administrador: string | null;
-  estatus: 'Activa' | 'Inactiva' | 'En configuración';
+  estatus: boolean; // realizar que dependiendo si es en configuracion o inactiva es false 
   fechaAlta: string;
 }
 
@@ -66,12 +66,8 @@ export class EstanciasTableComponent implements OnChanges {
     return '';
   }
 
-  getBadgeClass(estatus: string): string {
-    const map: Record<string, string> = {
-      'Activa': 'badge-active',
-      'Inactiva': 'badge-inactive',
-      'En configuración': 'badge-config',
-    };
-    return map[estatus] ?? '';
+  getBadgeClass(estatus: boolean): string {
+    if (estatus) return 'badge-active';
+    return 'badge-config'; // false = En configuración / Inactiva
   }
 }

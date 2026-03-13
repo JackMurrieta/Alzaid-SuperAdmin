@@ -34,11 +34,8 @@
           <div class="capacity-bar">
             <div class="cap-nums">{{ row.capacidadActual }} / {{ row.capacidadMax }}</div>
             <div class="cap-track">
-              <div
-                class="cap-fill"
-                [ngClass]="getCapacityClass(row.capacidadActual, row.capacidadMax)"
-                [style.width.%]="getCapacityPercent(row.capacidadActual, row.capacidadMax)"
-              ></div>
+              <div class="cap-fill" [ngClass]="getCapacityClass(row.capacidadActual, row.capacidadMax)"
+                [style.width.%]="getCapacityPercent(row.capacidadActual, row.capacidadMax)"></div>
             </div>
           </div>
         </td>
@@ -57,7 +54,7 @@
         <!-- Estatus badge -->
         <td>
           <span class="badge" [ngClass]="getBadgeClass(row.estatus)">
-            {{ row.estatus }}
+            {{ row.estatus ? 'Activa' : 'En configuración' }}
           </span>
         </td>
 
@@ -66,31 +63,19 @@
           <div class="row-actions">
 
             <!-- Ver detalle -->
-            <button
-              class="action-btn view"
-              title="Ver detalle"
-              (click)="onView(row)"
-            >
+            <button class="action-btn view" title="Ver detalle" (click)="onView(row)">
               <span class="material-symbols-outlined">visibility</span>
               <span class="btn-label">Ver</span>
             </button>
 
             <!-- Editar -->
-            <button
-              class="action-btn edit"
-              title="Editar estancia"
-              (click)="onEdit(row)"
-            >
+            <button class="action-btn edit" title="Editar estancia" (click)="onEdit(row)">
               <span class="material-symbols-outlined">edit</span>
               <span class="btn-label">Editar</span>
             </button>
 
             <!-- Eliminar -->
-            <button
-              class="action-btn delete"
-              title="Eliminar estancia"
-              (click)="onDelete(row)"
-            >
+            <button class="action-btn delete" title="Eliminar estancia" (click)="onDelete(row)">
               <span class="material-symbols-outlined">delete</span>
               <span class="btn-label">Eliminar</span>
             </button>
@@ -109,12 +94,8 @@
       <button class="page-btn" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
-      <button
-        *ngFor="let p of pages"
-        class="page-btn"
-        [class.active]="p === currentPage"
-        (click)="onPageChange(p)"
-      >{{ p }}</button>
+      <button *ngFor="let p of pages" class="page-btn" [class.active]="p === currentPage" (click)="onPageChange(p)">{{ p
+        }}</button>
       <button class="page-btn" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
