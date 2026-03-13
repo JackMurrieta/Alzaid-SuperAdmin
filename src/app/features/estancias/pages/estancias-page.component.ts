@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// Importas cada componente hijo directamente
 import { AsideSuperAdminMenu } from '../../../layout/aside-super-admin-menu/aside-super-admin-menu';
 import { TopbarComponent } from '../components/topbar/topbar.component';
 import { StatCardComponent } from '../components/stat-card/stat-card.component';
 import { FiltersBarComponent, FiltersState } from '../components/filters-bar/filters-bar.component';
 import { EstanciasTableComponent, Estancia } from '../components/table-component/estancias-table.component';
-import { EstanciaViewModalComponent } from '../components/estancia-view-modal/estancia-view-modal';
-
 
 import { SidebarService } from '../../../layout/aside-super-admin-menu/sidebar.service';
+import { FormRegistroComponent } from '../components/formRegistro/formRegistro.component';
+import { EstanciaService } from '../service/estancia.service';
 
 @Component({
   selector: 'app-estancias-page',
@@ -22,68 +21,92 @@ import { SidebarService } from '../../../layout/aside-super-admin-menu/sidebar.s
     StatCardComponent,
     FiltersBarComponent,
     EstanciasTableComponent,
-    EstanciaViewModalComponent
   ],
   templateUrl: './estancias-page.component.html',
   styleUrl: './estancias-page.component.scss',
 })
-export class EstanciasPageComponent {
+export class EstanciasPageComponent implements OnInit {
 
-  constructor(public sidebarSvc: SidebarService) { }
+  constructor(
+    public sidebarSvc: SidebarService,
+    private estanciaSvc: EstanciaService
+  ) { }
 
-  // ── Datos de stats ──
+  ngOnInit(): void {
+    this.cargarEstancias();
+  }
+
+  // ── Stats
   stats = [
-    { icon: 'domain', value: 12, label: 'Total Estancias', color: 'blue' as const },
-    { icon: 'check_circle', value: 9, label: 'Activas', color: 'green' as const },
-    { icon: 'settings', value: 2, label: 'En Configuración', color: 'amber' as const },
-    { icon: 'block', value: 1, label: 'Inactivas', color: 'red' as const },
+    { icon: 'domain', value: 0, label: 'Total Estancias', color: 'blue' as const },
+    { icon: 'check_circle', value: 0, label: 'Activas', color: 'green' as const },
+    { icon: 'settings', value: 0, label: 'En Configuración', color: 'amber' as const },
+    { icon: 'block', value: 0, label: 'Inactivas', color: 'red' as const },
   ];
 
-  // ── Datos de tabla ──
-  estancias: Estancia[] = [
-    {
-      id: 'EST-0001', nombre: 'Estancia del Sol',
-      ciudad: 'Ciudad Obregón', estado: 'Sonora', pais: 'México', colonia: 'Col. Centro',
-      horario: '8:00 – 17:00', capacidadActual: 18, capacidadMax: 25,
-      administrador: 'Rosa López', estatus: 'Activa', fechaAlta: '12/01/2024',
-    },
-    {
-      id: 'EST-0002', nombre: 'Casa de la Esperanza',
-      ciudad: 'Hermosillo', estado: 'Sonora', pais: 'México', colonia: 'Col. Pitic',
-      horario: '7:30 – 16:00', capacidadActual: 30, capacidadMax: 30,
-      administrador: 'Mario García', estatus: 'Activa', fechaAlta: '03/03/2024',
-    },
-    // ...más filas
-  ];
-
-  totalEstancias = 12;
+  // ── Tabla ──
+  estancias: Estancia[] = [];
+  cargando = false;
+  errorCarga = false;
+  totalEstancias = 0;
   currentPage = 1;
-  totalPages = 3;
+  totalPages = 1;
+
+  // ── Modal ──
+  mostrarModal = false;
+
+  // ── GET /api/centers ──
+  cargarEstancias(): void {
+    this.cargando = true;
+    this.errorCarga = false;
+
+    this.estanciaSvc.getCentros().subscribe({
+      next: (data) => {
+        this.estancias = data;
+        this.totalEstancias = data.length;
+
+        // Actualizar stats con datos reales
+        this.stats[0].value = data.length;
+        this.stats[1].value = data.filter((e: any) => e.isActive === true).length;
+        this.stats[2].value = data.filter((e: any) => e.isActive === false).length;
+        this.stats[3].value = 0; // ajustar si el backend maneja un estado "inactivo" distinto
+
+        this.totalPages = Math.ceil(data.length / 10) || 1;
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar estancias:', err);
+        this.errorCarga = true;
+        this.cargando = false;
+      }
+    });
+  }
 
   // ── Handlers ──
-  onNewEstancia() {
-    console.log('Abrir modal crear');
+  onNewEstancia(): void {
+    this.mostrarModal = true;
+  }
+
+  onModalCancelado(): void {
+    this.mostrarModal = false;
   }
 
   //Estado del modal
   selectedEstancia: Estancia | null = null;
   showViewModal = false;
 
-  onFiltersChange(filters: FiltersState) {
+  onFiltersChange(filters: FiltersState): void {
     console.log('Filtros:', filters);
-    // Aquí llamas tu servicio con los filtros
+    // TODO: pasar filtros al servicio
   }
 
-  onView(estancia: Estancia) {
-    this.selectedEstancia = estancia;
-    this.showViewModal = true;
+  onEstanciaCreada(datos: any): void {
+    this.mostrarModal = false;
+    this.cargarEstancias(); // refresca tabla con el nuevo registro
   }
+
+  onView(estancia: Estancia) { console.log('Ver:', estancia); }
   onEdit(estancia: Estancia) { console.log('Editar:', estancia); }
   onDelete(estancia: Estancia) { console.log('Eliminar:', estancia); }
   onPageChange(page: number) { this.currentPage = page; }
-
-  closeViewModal() {
-    this.showViewModal = false;
-    this.selectedEstancia = null;
-  }
 }
