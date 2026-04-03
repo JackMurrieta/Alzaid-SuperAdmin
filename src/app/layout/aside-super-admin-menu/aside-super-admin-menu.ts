@@ -1,7 +1,8 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from './sidebar.service';
+import { AuthService, User } from '../../features/auth/auth.service';
 
 @Component({
   selector: 'app-aside-super-admin-menu',
@@ -10,18 +11,38 @@ import { SidebarService } from './sidebar.service';
   templateUrl: './aside-super-admin-menu.html',
   styleUrl: './aside-super-admin-menu.scss',
 })
-export class AsideSuperAdminMenu {
+export class AsideSuperAdminMenu implements OnInit {
 
-  constructor(public sidebarSvc: SidebarService) { }
+  userName = '';
+  userRole = '';
 
-  openSidebar() { this.sidebarSvc.expand(); }
-  closeSidebar() { this.sidebarSvc.collapse(); }
+  constructor(
+    public sidebarSvc: SidebarService,
+    private authSvc: AuthService
+  ) { }
 
-  /* ── INFO DE USUARIO (obtenida desde backend) ── */
-  userName = 'Juan Pérez';
-  userRole = 'Super Usuario';
+  ngOnInit(): void {
+    this.authSvc.user$.subscribe((user: User | null) => {
+      if (user) {
+        this.userName = user.nombre;
+        this.userRole = this.mapRole(user.role);
+      } else {
+        this.userName = '';
+        this.userRole = '';
+      }
+    });
+  }
 
-  /** Iniciales calculadas para el avatar mini */
+  /** Mapea roles a etiquetas más amigables */
+  mapRole(role: string): string {
+    switch (role) {
+      case 'superadmin': return 'Super Administrador';
+      case 'admin': return 'Administrador';
+      default: return role || 'Sin rol';
+    }
+  }
+
+  /** Iniciales del usuario */
   get userInitials(): string {
     return this.userName
       .split(' ')
@@ -31,32 +52,25 @@ export class AsideSuperAdminMenu {
       .toUpperCase();
   }
 
-  /* ── ESTADO DEL SIDEBAR (para mobile toggle) ── */
+  /* SIDEBAR */
   sidebarExpanded = false;
 
-  /** Abre/cierra manualmente (útil en mobile con un botón) */
-  toggleSidebar() {
-    this.sidebarExpanded = !this.sidebarExpanded;
-  }
+  openSidebar() { this.sidebarSvc.expand(); }
+  closeSidebar() { this.sidebarSvc.collapse(); }
+  toggleSidebar() { this.sidebarExpanded = !this.sidebarExpanded; }
 
-  /* ── SUBMENÚ ESTANCIAS ── */
+  /* SUBMENÚ ESTANCIAS */
   estanciasOpen = false;
 
-  toggleEstancias() {
-    this.estanciasOpen = !this.estanciasOpen;
-  }
+  toggleEstancias() { this.estanciasOpen = !this.estanciasOpen; }
+  openEstancias() { this.estanciasOpen = true; }
+  closeEstancias() { this.estanciasOpen = false; }
 
-  openEstancias() {
-    this.estanciasOpen = true;
-  }
-
-  closeEstancias() {
-    this.estanciasOpen = false;
-  }
-
-  /* ── LOGOUT ── */
+  /* LOGOUT */
   logout() {
-    console.log('Cerrar sesión');
-    // Limpiar token y redirigir
+    const confirmLogout = confirm('¿Deseas cerrar sesión?');
+    if (confirmLogout) {
+      this.authSvc.logout();
+    }
   }
 }

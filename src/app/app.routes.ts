@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { EstanciasPageComponent } from './features/estancias/pages/estancias-page.component';
-import { AUTH_ROUTES } from './features/auth/auth.routes';
+import { authGuard } from './guards/auth.guard';
+import { noAuthGuard } from './guards/no-auth.guard';
 
 export const routes: Routes = [
   {
@@ -8,14 +8,15 @@ export const routes: Routes = [
     redirectTo: 'auth/login',
     pathMatch: 'full',
   },
-
   {
     path: 'auth',
-    children: AUTH_ROUTES
+    canActivate: [noAuthGuard],
+    loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
   },
-
   {
     path: 'estancias',
-    component: EstanciasPageComponent,
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/estancias/pages/estancias-page.component')
+      .then(m => m.EstanciasPageComponent),
   },
 ];
