@@ -1,22 +1,18 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { toObservable } from '@angular/core/rxjs-interop'; // ← 
 import { LoadingService } from './core/services/loading.service';
-import { LoadingComponent } from '../app/shared/components/loading.component/loading.component';
+import { LoadingComponent } from './shared/components/loading.component/loading.component';
+import { ToastComponent } from './shared/components/toast.component/toast.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoadingComponent],
+  imports: [RouterOutlet, AsyncPipe, LoadingComponent, ToastComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
   protected readonly title = signal('alzaid-superadmin');
-  isLoading = false;
-  // inyectamos el servicio de loading para mostrar el spinner global
-  constructor(private loadingService: LoadingService) {
-    this.loadingService.loading$.subscribe((state) => {
-      this.isLoading = state;
-    });
-  }
-
+  protected readonly loadingSvc = inject(LoadingService);
 }

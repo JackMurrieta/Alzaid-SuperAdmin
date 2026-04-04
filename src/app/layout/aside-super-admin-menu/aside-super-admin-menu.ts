@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { map } from 'rxjs/operators';
+
 import { SidebarService } from './sidebar.service';
-import { AuthService, User } from '../../features/auth/auth.service';
+import { AuthService } from '../../features/auth/auth.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-aside-super-admin-menu',
@@ -10,67 +13,82 @@ import { AuthService, User } from '../../features/auth/auth.service';
   imports: [CommonModule, RouterModule],
   templateUrl: './aside-super-admin-menu.html',
   styleUrl: './aside-super-admin-menu.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AsideSuperAdminMenu implements OnInit {
+export class AsideSuperAdminMenu {
 
-  userName = '';
-  userRole = '';
+  /* ========================
+      SERVICIOS
+  ======================== */
+  private authSvc = inject(AuthService);
+  protected sidebarSvc = inject(SidebarService);  // protected para el template
+  private notifSvc = inject(NotificationService);
 
-  constructor(
-    public sidebarSvc: SidebarService,
-    private authSvc: AuthService
-  ) { }
+  /* ========================
+      VIEW MODEL
+  ======================== */
+  vm$ = this.authSvc.user$.pipe(
+    map(user => ({
+      userName: user?.nombre ?? '',
+      userRole: this.mapRole(user?.role ?? ''),
+      userInitials: this.getInitials(user?.nombre ?? '')
+    }))
+  );
 
-  ngOnInit(): void {
-    this.authSvc.user$.subscribe((user: User | null) => {
-      if (user) {
-        this.userName = user.nombre;
-        this.userRole = this.mapRole(user.role);
-      } else {
-        this.userName = '';
-        this.userRole = '';
-      }
-    });
-  }
-
-  /** Mapea roles a etiquetas más amigables */
-  mapRole(role: string): string {
-    switch (role) {
-      case 'superadmin': return 'Super Administrador';
-      case 'admin': return 'Administrador';
-      default: return role || 'Sin rol';
-    }
-  }
-
-  /** Iniciales del usuario */
-  get userInitials(): string {
-    return this.userName
-      .split(' ')
-      .map(w => w[0])
-      .slice(0, 2)
-      .join('')
-      .toUpperCase();
-  }
-
-  /* SIDEBAR */
+  /* ========================
+      ESTADO LOCAL
+  ======================== */
   sidebarExpanded = false;
+  estanciasOpen = false;
 
+  /* ========================
+      SIDEBAR
+  ======================== */
   openSidebar() { this.sidebarSvc.expand(); }
   closeSidebar() { this.sidebarSvc.collapse(); }
   toggleSidebar() { this.sidebarExpanded = !this.sidebarExpanded; }
 
-  /* SUBMENÚ ESTANCIAS */
-  estanciasOpen = false;
-
+  /* ========================
+      ESTANCIAS SUBMENU
+  ======================== */
   toggleEstancias() { this.estanciasOpen = !this.estanciasOpen; }
   openEstancias() { this.estanciasOpen = true; }
   closeEstancias() { this.estanciasOpen = false; }
 
-  /* LOGOUT */
-  logout() {
-    const confirmLogout = confirm('¿Deseas cerrar sesión?');
-    if (confirmLogout) {
+  /* ========================
+      AUTH
+  ======================== */
+  logout(): void {
+    this.notifSvc.show(
+      '¿Deseas cerrar sesión?',
+      'warning'
+    );
+    // Si tienes un modal de confirmación úsalo aquí,
+    // por ahora usamos confirm() nativo
+    if (confirm('¿Deseas cerrar sesión?')) {
       this.authSvc.logout();
+      this.notifSvc.success('Sesión cerrada correctamente');
     }
+  }
+
+  /* ========================
+      HELPERS PRIVADOS
+  ======================== */
+  private mapRole(role: string): string {
+    const roles: Record<string, string> = {
+      superadmin: 'Super Administrador',
+      admin: 'Administrador',
+    };
+    return roles[role] ?? role ?? 'Sin rol';
+  }
+
+  private getInitials(name: string): string {
+    return name
+      .split(' ')
+      .filter(w => w.length > 0)
+      .map(w => w[0])
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
   }
 }

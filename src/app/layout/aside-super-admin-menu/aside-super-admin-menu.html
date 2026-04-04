@@ -6,19 +6,22 @@
   </div>
 
   <!-- ADMIN INFO -->
-  <div class="sidebar-admin">
-    <!-- Avatar compacto (modo mini) -->
-    <div class="admin-avatar-mini">{{ userInitials }}</div>
-    <!-- Badge completo (modo expandido) -->
-    <div class="admin-badge">
-      <strong>{{ userName }}</strong>
-      <span>{{ userRole }}</span>
+  <div class="sidebar-admin" *ngIf="vm$ | async as vm">
+
+    <!-- Avatar mini -->
+    <div class="admin-avatar-mini">
+      {{ vm.userInitials }}
     </div>
+
+    <!-- Badge -->
+    <div class="admin-badge">
+      <strong>{{ vm.userName }}</strong>
+      <span>{{ vm.userRole }}</span>
+    </div>
+
   </div>
 
-  <!-- =====================
-       ZONA CON SCROLL
-  ========================-->
+  <!-- ===================== SCROLL ===================== -->
   <div class="sidebar-scroll">
     <nav class="sidebar-nav">
 
@@ -28,7 +31,7 @@
       </div>
 
       <a class="nav-item" routerLink="/super/dashboard" routerLinkActive="active">
-        <img src="icons-superAdmin/homeIcon.svg" class="icon" alt="Inicio" />
+        <img src="icons-superAdmin/homeIcon.svg" class="icon" />
         <span>Inicio</span>
       </a>
 
@@ -37,16 +40,17 @@
         <span class="section-label">Gestión</span>
       </div>
 
-      <!-- WRAPPER ESTANCIAS -->
+      <!-- ESTANCIAS -->
       <div class="estancias-wrapper" (mouseenter)="openEstancias()" (mouseleave)="closeEstancias()">
 
         <a class="nav-item expandable" routerLink="estancias" routerLinkActive="active" (click)="toggleEstancias()">
+
           <div class="nav-main">
-            <img src="icons-superAdmin/estanciasIcon.svg" class="icon" alt="Estancias" />
+            <img src="icons-superAdmin/estanciasIcon.svg" class="icon" />
             <span>Estancias</span>
           </div>
-          <svg class="arrow" [class.rotate]="estanciasOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2.5">
+
+          <svg class="arrow" [class.rotate]="estanciasOpen" viewBox="0 0 24 24">
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </a>
@@ -54,24 +58,28 @@
         <!-- SUBMENU -->
         <div class="submenu" *ngIf="estanciasOpen">
           <a class="nav-subitem" routerLink="/super/estancias/operar" routerLinkActive="active">
-            <img src="icons-superAdmin/operarEstanciaIcon.svg" class="icon-sub" alt="" />
-            <span class="nav-subitem-text">Operar Estancia</span>
+
+            <img src="icons-superAdmin/operarEstanciaIcon.svg" class="icon-sub" />
+            <span>Operar Estancia</span>
           </a>
+
           <a class="nav-subitem" routerLink="/super/estancias/inactivas" routerLinkActive="active">
-            <img src="icons-superAdmin/estanciasInactivas.svg" class="icon-sub" alt="" />
-            <span class="nav-subitem-text">Estancias Inactivas</span>
+
+            <img src="icons-superAdmin/estanciasInactivas.svg" class="icon-sub" />
+            <span>Estancias Inactivas</span>
           </a>
         </div>
-      </div>
-      <!-- FIN WRAPPER -->
 
+      </div>
+
+      <!-- OTROS -->
       <a class="nav-item" routerLink="/super/usuarios" routerLinkActive="active">
-        <img src="icons-superAdmin/usersIcon.svg" class="icon" alt="Usuarios" />
+        <img src="icons-superAdmin/usersIcon.svg" class="icon" />
         <span>Usuarios</span>
       </a>
 
       <a class="nav-item" routerLink="/super/administradores" routerLinkActive="active">
-        <img src="icons-superAdmin/administradoresIcon.svg" class="icon" alt="Administradores" />
+        <img src="icons-superAdmin/administradoresIcon.svg" class="icon" />
         <span>Administradores</span>
       </a>
 
@@ -81,28 +89,27 @@
       </div>
 
       <a class="nav-item" routerLink="/super/metricas" routerLinkActive="active">
-        <img src="icons-superAdmin/MetricasIcon.svg" class="icon" alt="Métricas Globales" />
+        <img src="icons-superAdmin/MetricasIcon.svg" class="icon" />
         <span>Métricas Globales</span>
       </a>
 
       <a class="nav-item" routerLink="/super/auditoria" routerLinkActive="active">
-        <img src="icons-superAdmin/auditoriaIcon.svg" class="icon icon--auditoria" alt="Auditoría Global" />
+        <img src="icons-superAdmin/auditoriaIcon.svg" class="icon" />
         <span>Auditoría Global</span>
       </a>
 
       <a class="nav-item" routerLink="/super/configuracion" routerLinkActive="active">
-        <img src="icons-superAdmin/configIcon.svg" class="icon" alt="Configuración" />
+        <img src="icons-superAdmin/configIcon.svg" class="icon" />
         <span>Configuración</span>
       </a>
 
     </nav>
   </div>
-  <!-- FIN SCROLL -->
 
-  <!-- LOGOUT (fijo abajo) -->
+  <!-- LOGOUT -->
   <div class="sidebar-bottom">
     <a class="nav-item logout" (click)="logout()">
-      <img src="icons-superAdmin/logOutIcon.svg" class="icon" alt="Cerrar sesión" />
+      <img src="icons-superAdmin/logOutIcon.svg" class="icon" />
       <span>Cerrar sesión</span>
     </a>
   </div>

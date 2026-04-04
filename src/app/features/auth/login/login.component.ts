@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth.service';
+import { finalize } from 'rxjs/operators';
+
+import { AuthService, LoginPayload } from '../auth.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -10,24 +13,25 @@ import { AuthService } from '../auth.service';
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush  // ← evita NG0100
 })
 export class LoginComponent {
-  form: FormGroup;
+
+  private fb = inject(FormBuilder);
+  private authSvc = inject(AuthService);
+  private router = inject(Router);
+  private notifSvc = inject(NotificationService);
+  private cdr = inject(ChangeDetectorRef);
+
+  form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+  });
+
   submitted = false;
   isLoading = false;
-  errorMsg = '';
+  errorMsg: string | null = null;
   showPass = false;
-
-  constructor(
-    private fb: FormBuilder,
-    private authSvc: AuthService,
-    private router: Router
-  ) {
-    this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
-  }
 
   isInvalid(field: string): boolean {
     const ctrl = this.form.get(field);
@@ -38,21 +42,31 @@ export class LoginComponent {
 
   onSubmit(): void {
     this.submitted = true;
-    this.errorMsg = '';
+    this.errorMsg = null;
+
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
+    const payload = this.form.value as LoginPayload;
     this.isLoading = true;
-    this.authSvc.login(this.form.value).subscribe({
-      next: () => {
+    this.cdr.markForCheck();
+
+    this.authSvc.login(payload).pipe(
+      finalize(() => {
         this.isLoading = false;
-        this.router.navigate(['/estancias']); // ajusta tu ruta destino
+        this.cdr.markForCheck(); // ← markForCheck en lugar de detectChanges
+      })
+    ).subscribe({
+      next: () => {
+        this.router.navigate(['/estancias']);
       },
       error: (err) => {
-        this.isLoading = false;
-        this.errorMsg = err.status === 401
-          ? 'Correo o contraseña incorrectos'
-          : 'Error al conectar con el servidor';
-      },
+        this.errorMsg = err.status === 401 ? 'Correo o contraseña incorrectos'
+          : err.status === 0 ? 'Sin conexión. Verifica tu red'
+            : 'Error inesperado. Intenta de nuevo';
+
+        this.notifSvc.error(this.errorMsg);
+        this.cdr.markForCheck();
+      }
     });
   }
 }
