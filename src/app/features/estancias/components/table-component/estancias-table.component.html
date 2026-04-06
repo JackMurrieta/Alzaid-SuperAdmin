@@ -3,10 +3,9 @@
     <thead>
       <tr>
         <th>Estancia</th>
-        <th>Ubicación</th>
-        <th>Horario</th>
-        <th>Capacidad</th>
-        <th>Administrador</th>
+        <th>Contacto</th>
+        <th>Dirección</th>
+        <th>País</th>
         <th>Estatus</th>
         <th>Acciones</th>
       </tr>
@@ -16,49 +15,33 @@
 
         <!-- Nombre + ID -->
         <td>
-          <div class="estancia-name">{{ row.nombre }}</div>
-          <div class="estancia-id">#{{ row.id }} &bull; Alta: {{ row.fechaAlta }}</div>
+          <div class="estancia-name">{{ row.name }}</div>
+          <div class="estancia-id">#{{ row._id }}</div>
         </td>
 
-        <!-- Ubicación -->
+        <!-- Contacto -->
         <td>
-          <div class="location-city">{{ row.ciudad }}, {{ row.estado }}</div>
-          <div class="location-sub">{{ row.pais }} &bull; {{ row.colonia }}</div>
+          <div class="contact-email">{{ row.email }}</div>
+          <div class="contact-phone">{{ row.phone }}</div>
         </td>
 
-        <!-- Horario -->
-        <td class="horario">{{ row.horario }}</td>
-
-        <!-- Capacidad con barra -->
+        <!-- Dirección -->
         <td>
-          <div class="capacity-bar">
-            <div class="cap-nums">{{ row.capacidadActual }} / {{ row.capacidadMax }}</div>
-            <div class="cap-track">
-              <div class="cap-fill" [ngClass]="getCapacityClass(row.capacidadActual, row.capacidadMax)"
-                [style.width.%]="getCapacityPercent(row.capacidadActual, row.capacidadMax)"></div>
-            </div>
-          </div>
+          <div class="location-address">{{ row.address }}</div>
+          <div class="location-sub">{{ row.description }}</div>
         </td>
 
-        <!-- Administrador -->
-        <td>
-          <div class="admin-chip" *ngIf="row.administrador; else sinAdmin">
-            <div class="admin-avatar">{{ getInitials(row.administrador) }}</div>
-            <span>{{ row.administrador }}</span>
-          </div>
-          <ng-template #sinAdmin>
-            <span class="unassigned">Sin asignar</span>
-          </ng-template>
-        </td>
+        <!-- País -->
+        <td class="pais">{{ row.country }}</td>
 
         <!-- Estatus badge -->
         <td>
-          <span class="badge" [ngClass]="getBadgeClass(row.estatus)">
-            {{ row.estatus ? 'Activa' : 'En configuración' }}
+          <span class="badge" [ngClass]="getBadgeClass(row.isActive)">
+            {{ row.isActive ? 'Activa' : 'Inactiva' }}
           </span>
         </td>
 
-        <!-- ── ACCIONES ── -->
+        <!-- ACCIONES -->
         <td>
           <div class="row-actions">
 

@@ -6,10 +6,12 @@
         <div class="modal-header">
 
             <div>
-                <h2>{{ estancia?.nombre }}</h2>
+                <h2>{{ estancia?.name }}</h2>
                 <div class="sub">
-                    #{{ estancia?.id }}
-                    <span class="badge">{{ estancia?.estatus }}</span>
+                    #{{ estancia?._id }}
+                    <span class="badge" [ngClass]="estancia?.isActive ? 'badge-active' : 'badge-inactive'">
+                        {{ estancia?.isActive ? 'Activa' : 'Inactiva' }}
+                    </span>
                 </div>
             </div>
 
@@ -20,7 +22,7 @@
         <!-- BODY -->
         <div class="modal-body" *ngIf="estancia">
 
-            <!-- INFORMACION GENERAL -->
+            <!-- INFORMACIÓN GENERAL -->
             <section class="section">
                 <h3>Información general</h3>
 
@@ -28,73 +30,44 @@
 
                     <div class="field">
                         <label>Nombre</label>
-                        <p>{{ estancia.nombre }}</p>
+                        <p>{{ estancia.name }}</p>
                     </div>
 
                     <div class="field">
-                        <label>Fecha de alta</label>
-                        <p>{{ estancia.fechaAlta }}</p>
+                        <label>Descripción</label>
+                        <p>{{ estancia.description }}</p>
                     </div>
 
                     <div class="field">
-                        <label>Capacidad</label>
-                        <p>{{ estancia.capacidadActual }} / {{ estancia.capacidadMax }}</p>
+                        <label>Teléfono</label>
+                        <p>{{ estancia.phone }}</p>
                     </div>
 
                     <div class="field">
-                        <label>Horario</label>
-                        <p>{{ estancia.horario }}</p>
+                        <label>Correo electrónico</label>
+                        <p>{{ estancia.email }}</p>
                     </div>
 
                 </div>
             </section>
 
-            <!-- UBICACION -->
+            <!-- UBICACIÓN -->
             <section class="section">
                 <h3>Ubicación</h3>
 
                 <div class="grid">
 
+                    <div class="field full-width">
+                        <label>Dirección</label>
+                        <p>{{ estancia.address }}</p>
+                    </div>
+
                     <div class="field">
                         <label>País</label>
-                        <p>{{ estancia.pais }}</p>
-                    </div>
-
-                    <div class="field">
-                        <label>Estado</label>
-                        <p>{{ estancia.estado }}</p>
-                    </div>
-
-                    <div class="field">
-                        <label>Ciudad</label>
-                        <p>{{ estancia.ciudad }}</p>
-                    </div>
-
-                    <div class="field">
-                        <label>Colonia</label>
-                        <p>{{ estancia.colonia }}</p>
+                        <p>{{ estancia.country }}</p>
                     </div>
 
                 </div>
-            </section>
-
-            <!-- ADMIN -->
-            <section class="section">
-                <h3>Administrador</h3>
-
-                <div class="admin-card">
-
-                    <div class="avatar">
-                        {{ getInitials(estancia.administrador) }}
-                    </div>
-
-                    <div>
-                        <div class="admin-name">{{ estancia.administrador }}</div>
-                        <div class="admin-role">Administrador asignado</div>
-                    </div>
-
-                </div>
-
             </section>
 
         </div>
@@ -106,7 +79,7 @@
                 Cerrar
             </button>
 
-            <button class="btn-primary">
+            <button class="btn-primary" (click)="onEdit()">
                 Editar Estancia
             </button>
 

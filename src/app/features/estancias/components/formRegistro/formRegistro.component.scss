@@ -4,9 +4,7 @@
   --navy-mid: #1a3260;
   --accent: #3b82f6;
   --accent-light: #dbeafe;
-  --teal: #0ea5e9;
   --success: #10b981;
-  --warning: #f59e0b;
   --danger: #ef4444;
   --bg: #f0f4f8;
   --surface: #ffffff;
@@ -18,7 +16,9 @@
 }
 
 // ── RESET ──
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -38,24 +38,37 @@
   transition: all 0.15s;
   font-family: inherit;
 
-  svg { width: 16px; height: 16px; }
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 
   &-primary {
     background: var(--navy);
     color: white;
+
     &:hover {
       background: var(--navy-mid);
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(15, 31, 61, 0.25);
     }
-    &:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
   }
 
   &-ghost {
     background: transparent;
     color: var(--muted);
     border: 1px solid var(--border);
-    &:hover { background: var(--bg); color: var(--text); }
+
+    &:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
   }
 }
 
@@ -71,8 +84,14 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modal-header {
@@ -107,10 +126,16 @@
   justify-content: center;
   color: var(--muted);
   transition: all 0.12s;
-  &:hover { background: #fef2f2; color: var(--danger); }
+
+  &:hover {
+    background: #fef2f2;
+    color: var(--danger);
+  }
 }
 
-.modal-body  { padding: 24px 28px; }
+.modal-body {
+  padding: 24px 28px;
+}
 
 .modal-footer {
   padding: 18px 28px;
@@ -123,8 +148,10 @@
   border-radius: 0 0 18px 18px;
 }
 
-// ── FORM SECTIONS ──
-.form-section { margin-bottom: 24px; }
+// ── SECCIONES ──
+.form-section {
+  margin-bottom: 24px;
+}
 
 .form-section-title {
   font-size: 11px;
@@ -136,15 +163,26 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  &::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
 }
 
 // ── GRID ──
 .form-grid {
   display: grid;
   gap: 14px;
-  &-2 { grid-template-columns: 1fr 1fr; }
-  &-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  &-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+  &-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 // ── CAMPO ──
@@ -153,18 +191,28 @@
   flex-direction: column;
   gap: 5px;
 
-  &-full { grid-column: 1 / -1; }
+  &-full {
+    grid-column: 1 / -1;
+  }
 
-  label { font-size: 12.5px; font-weight: 600; color: var(--text); }
+  label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
 
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     padding: 10px 13px;
     border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 13.5px;
     font-family: inherit;
     outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
     background: white;
     color: var(--text);
 
@@ -174,12 +222,17 @@
     }
   }
 
-  textarea { resize: vertical; min-height: 80px; }
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
 
   .hint {
     font-size: 11.5px;
     color: var(--muted);
-    &.error { color: var(--danger); }
+    &.error {
+      color: var(--danger);
+    }
   }
 }
 
@@ -190,10 +243,13 @@
   cursor: not-allowed;
 }
 
-// ── INPUT CON ÍCONO DE ESTADO (CP) ──
+// ── CP CON ESTADO ──
 .input-with-status {
   position: relative;
-  input { padding-right: 34px; width: 100%; }
+  input {
+    padding-right: 34px;
+    width: 100%;
+  }
 }
 
 .cp-status {
@@ -203,11 +259,16 @@
   transform: translateY(-50%);
   font-size: 13px;
   font-weight: 700;
-  &.success { color: var(--success); }
-  &.error   { color: var(--danger); }
+
+  &.success {
+    color: var(--success);
+  }
+  &.error {
+    color: var(--danger);
+  }
 }
 
-// ── VISTA PREVIA DE DIRECCIÓN ──
+// ── VISTA PREVIA DIRECCIÓN ──
 .address-preview {
   margin-top: 12px;
   padding: 10px 14px;
@@ -234,20 +295,15 @@
 }
 
 // ── ETIQUETAS ──
-.req { color: var(--danger); margin-left: 2px; }
-.opt { color: var(--muted); font-weight: 400; font-size: 11px; margin-left: 4px; }
-
-// ── CAJAS DE AVISO ──
-.note-box {
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 12.5px;
-  color: #1d4ed8;
-  line-height: 1.5;
-  margin-bottom: 6px;
-  strong { display: block; margin-bottom: 2px; }
+.req {
+  color: var(--danger);
+  margin-left: 2px;
+}
+.opt {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 11px;
+  margin-left: 4px;
 }
 
 // ── TOAST ──
@@ -270,7 +326,10 @@
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  &.show { transform: translateY(0); opacity: 1; }
+  &.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
 
   &-icon {
     width: 22px;
@@ -288,5 +347,7 @@
 // ── RESPONSIVE ──
 @media (max-width: 600px) {
   .form-grid-2,
-  .form-grid-3 { grid-template-columns: 1fr; }
+  .form-grid-3 {
+    grid-template-columns: 1fr;
+  }
 }

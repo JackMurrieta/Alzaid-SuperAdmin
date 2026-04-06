@@ -1,19 +1,17 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+// Modelo que refleja exactamente el JSON del backend
 export interface Estancia {
-  id: string;
-  nombre: string;
-  ciudad: string;
-  estado: string;
-  pais: string;
-  colonia: string;
-  horario: string;
-  capacidadActual: number;
-  capacidadMax: number;
-  administrador: string | null;
-  estatus: boolean; // realizar que dependiendo si es en configuracion o inactiva es false 
-  fechaAlta: string;
+  _id: string;
+  name: string;
+  description: string;
+  address: string;
+  email: string;
+  phone: string;
+  country: string;
+  isActive: boolean;
+  // createdAt y updatedAt se omiten porque no son relevantes para el front
 }
 
 @Component({
@@ -54,20 +52,7 @@ export class EstanciasTableComponent implements OnChanges {
       .toUpperCase();
   }
 
-  getCapacityPercent(actual: number, max: number): number {
-    if (max === 0) return 0;
-    return Math.round((actual / max) * 100);
-  }
-
-  getCapacityClass(actual: number, max: number): string {
-    const pct = this.getCapacityPercent(actual, max);
-    if (pct >= 100) return 'full';
-    if (pct >= 70) return 'warn';
-    return '';
-  }
-
-  getBadgeClass(estatus: boolean): string {
-    if (estatus) return 'badge-active';
-    return 'badge-config'; // false = En configuración / Inactiva
+  getBadgeClass(isActive: boolean): string {
+    return isActive ? 'badge-active' : 'badge-inactive';
   }
 }

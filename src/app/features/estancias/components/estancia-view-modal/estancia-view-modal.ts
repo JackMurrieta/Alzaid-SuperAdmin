@@ -14,21 +14,15 @@ export class EstanciaViewModalComponent {
   @Input() estancia: Estancia | null = null;
 
   @Output() close = new EventEmitter<void>();
+  @Output() edit = new EventEmitter<Estancia>();
 
-  closeModal() {
+  closeModal(): void {
     this.close.emit();
   }
 
-  getInitials(name: string | null | undefined): string {
-    if (!name) return '';
-
-    return name
-      .split(' ')
-      .map(w => w[0])
-      .slice(0, 2)
-      .join('')
-      .toUpperCase();
+  onEdit(): void {
+    if (this.estancia) {
+      this.edit.emit(this.estancia);
+    }
   }
-
-
 }

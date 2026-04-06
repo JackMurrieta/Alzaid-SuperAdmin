@@ -35,8 +35,12 @@ tbody tr {
   border-bottom: 1px solid var(--border);
   transition: background 0.12s ease;
 
-  &:last-child { border-bottom: none; }
-  &:hover { background: #f8fafc; }
+  &:last-child {
+    border-bottom: none;
+  }
+  &:hover {
+    background: #f8fafc;
+  }
 }
 
 td {
@@ -55,10 +59,23 @@ td {
   font-size: 0.6875rem;
   color: var(--muted);
   margin-top: 0.125rem;
+  word-break: break-all; /* los _id de mongo son largos */
 }
 
-/* ── CELDA UBICACIÓN ── */
-.location-city {
+/* ── CELDA CONTACTO ── */
+.contact-email {
+  font-size: 0.84375rem;
+  color: var(--text);
+}
+
+.contact-phone {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.125rem;
+}
+
+/* ── CELDA DIRECCIÓN ── */
+.location-address {
   font-size: 0.84375rem;
   color: var(--text);
 }
@@ -69,67 +86,11 @@ td {
   margin-top: 0.125rem;
 }
 
-/* ── CELDA HORARIO ── */
-.horario {
+/* ── CELDA PAÍS ── */
+.pais {
   font-size: 0.8125rem;
   color: var(--text);
   white-space: nowrap;
-}
-
-/* ── CAPACIDAD ── */
-.capacity-bar {
-  width: 84px;
-}
-
-.cap-nums {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-bottom: 0.1875rem;
-}
-
-.cap-track {
-  height: 5px;
-  background: var(--border);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.cap-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: var(--accent);
-  transition: width 0.4s ease;
-
-  &.warn { background: var(--warning); }
-  &.full { background: var(--danger); }
-}
-
-/* ── ADMINISTRADOR ── */
-.admin-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4375rem;
-  font-size: 0.8125rem;
-}
-
-.admin-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--teal));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.unassigned {
-  color: var(--muted);
-  font-style: italic;
-  font-size: 0.78125rem;
 }
 
 /* ── BADGES DE ESTATUS ── */
@@ -151,14 +112,17 @@ td {
     background: currentColor;
   }
 
-  &.badge-active   { background: #dcfce7; color: #15803d; }
-  &.badge-inactive { background: #fee2e2; color: #b91c1c; }
-  &.badge-config   { background: #fef9c3; color: #a16207; }
+  &.badge-active {
+    background: #dcfce7;
+    color: #15803d;
+  }
+  &.badge-inactive {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
 }
 
-/* ══════════════════════════════════════════
-   BOTONES DE ACCIÓN — coloridos e intuitivos
-═══════════════════════════════════════════*/
+/* ── BOTONES DE ACCIÓN ── */
 .row-actions {
   display: flex;
   align-items: center;
@@ -181,11 +145,9 @@ td {
 
   .material-symbols-outlined {
     font-size: 1rem;
-    font-variation-settings: 'FILL' 0, 'wght' 500;
-  }
-
-  .btn-label {
-    /* Ocultar en pantallas pequeñas si hace falta */
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 500;
   }
 
   /* ── Ver — azul ── */
@@ -203,7 +165,7 @@ td {
     }
   }
 
-  /* ── Editar — verde-teal ── */
+  /* ── Editar — verde ── */
   &.edit {
     background: #f0fdf4;
     color: #15803d;
@@ -272,7 +234,9 @@ td {
   transition: all 0.12s ease;
   color: var(--muted);
 
-  .material-symbols-outlined { font-size: 1rem; }
+  .material-symbols-outlined {
+    font-size: 1rem;
+  }
 
   &:hover:not(:disabled) {
     background: var(--bg);

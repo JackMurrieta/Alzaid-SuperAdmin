@@ -1,4 +1,3 @@
-// formRegistro.component.ts
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -14,6 +13,8 @@ export interface EstanciaPayload {
   city: string;
   state: string;
   country: string;
+  email: string;
+  phone: string;
   isActive: boolean;
 }
 
@@ -39,13 +40,6 @@ export class FormRegistroComponent implements OnInit, OnDestroy {
   cpExito = false;
   cpError = false;
 
-  administradores = [
-    { id: '1', nombre: 'Rosa López' },
-    { id: '2', nombre: 'Mario García' },
-    { id: '3', nombre: 'Carlos Pérez' },
-    { id: '4', nombre: 'Ana Martínez' },
-  ];
-
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -68,30 +62,23 @@ export class FormRegistroComponent implements OnInit, OnDestroy {
 
   private buildForm(): void {
     this.form = this.fb.group({
+      // Información básica
       name: ['', Validators.required],
       description: [''],
-      capacidad: [null, [Validators.required, Validators.min(1)]],
-      estatus: ['configuracion'],   // 'configuracion' → isActive: false | 'activa' → isActive: true
+      isActive: [false],   // false = En configuración, true = Activa
 
+      // Ubicación
       country: ['México'],
       state: ['', Validators.required],
       city: ['', Validators.required],
-
       calle: ['', Validators.required],
       numero: ['', Validators.required],
       colonia: [''],
-      codigoPostal: ['', [Validators.pattern(/^\d{5}$/)]],
+      codigoPostal: ['', Validators.pattern(/^\d{5}$/)],
 
-      telefono: ['', Validators.required],
+      // Contacto
+      phone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      telefonoSecundario: [''],
-      sitioWeb: [''],
-
-      horaApertura: ['08:00', Validators.required],
-      horaCierre: ['17:00', Validators.required],
-      diasOperacion: ['lunes-viernes', Validators.required],
-
-      administrador: [''],
     });
   }
 
@@ -147,7 +134,9 @@ export class FormRegistroComponent implements OnInit, OnDestroy {
       city: f.city,
       state: f.state,
       country: f.country,
-      isActive: f.estatus === 'activa',  // false si "configuracion", true si "activa"
+      email: f.email,
+      phone: f.phone,
+      isActive: f.isActive,
     };
 
     this.estanciaSvc.crearCentro(payload).subscribe({
