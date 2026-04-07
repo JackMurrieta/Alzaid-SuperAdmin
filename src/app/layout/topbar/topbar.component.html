@@ -1,0 +1,32 @@
+<div class="topbar">
+
+  <!-- Breadcrumb generado desde la ruta -->
+  <nav class="topbar-breadcrumb" aria-label="Breadcrumb">
+
+    <span class="material-symbols-outlined breadcrumb-icon">home</span>
+
+    <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
+
+      <a *ngIf="crumb.path && !last" [routerLink]="crumb.path" class="crumb-link">
+        {{ crumb.label }}
+      </a>
+
+      <span *ngIf="!crumb.path || last" class="crumb-current" [class.crumb-active]="last">
+        {{ crumb.label }}
+      </span>
+
+      <span *ngIf="!last" class="crumb-sep" aria-hidden="true">›</span>
+
+    </ng-container>
+
+  </nav>
+
+  <!-- Botón de acción (opcional, configurado por el padre) -->
+  <div class="topbar-actions" *ngIf="action">
+    <button class="btn-action" (click)="onAction()">
+      <span *ngIf="action.icon" class="material-symbols-outlined">{{ action.icon }}</span>
+      {{ action.label }}
+    </button>
+  </div>
+
+</div>

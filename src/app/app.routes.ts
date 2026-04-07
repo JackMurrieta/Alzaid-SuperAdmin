@@ -19,4 +19,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/estancias/pages/estancias-page.component')
       .then(m => m.EstanciasPageComponent),
   },
+  {
+    path: 'usuarios',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/usuarios/pages/user-page.component/user-page.component')
+      .then(m => m.UsersPageComponent),
+  }
 ];

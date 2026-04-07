@@ -1,1 +1,105 @@
-<p>user-table.component works!</p>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Contacto</th>
+                <th>Rol</th>
+                <th>Estancia</th>
+                <th>Estatus</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of usuarios">
+
+                <!-- Nombre + username -->
+                <td>
+                    <div class="user-cell">
+                        <div class="user-avatar">{{ getInitials(row) }}</div>
+                        <div>
+                            <div class="user-name">{{ row.name }} {{ row.lastName }} {{ row.lastNameSecond }}</div>
+                            <div class="user-username">&#64;{{ row.username }}</div>
+                        </div>
+                    </div>
+                </td>
+
+                <!-- Contacto -->
+                <td>
+                    <div class="contact-email">{{ row.email }}</div>
+                    <div class="contact-phone">{{ row.phone }}</div>
+                </td>
+
+                <!-- Rol -->
+                <td>
+                    <span class="rol-badge" [ngClass]="getRolClass(row.role)">
+                        {{ getRolLabel(row.role) }}
+                    </span>
+                </td>
+
+                <!-- Estancia asignada -->
+                <td>
+                    <span *ngIf="row.centerId; else sinEstancia" class="center-id">
+                        {{ row.centerId }}
+                    </span>
+                    <ng-template #sinEstancia>
+                        <span class="unassigned">Sin asignar</span>
+                    </ng-template>
+                </td>
+
+                <!-- Estatus -->
+                <td>
+                    <span class="badge" [ngClass]="getEstatusClass(row)">
+                        {{ getEstatusLabel(row) }}
+                    </span>
+                </td>
+
+                <!-- Acciones -->
+                <td>
+                    <div class="row-actions">
+
+                        <button class="action-btn view" title="Ver detalle" (click)="onView(row)">
+                            <span class="material-symbols-outlined">visibility</span>
+                            <span class="btn-label">Ver</span>
+                        </button>
+
+                        <button class="action-btn edit" title="Editar usuario" (click)="onEdit(row)">
+                            <span class="material-symbols-outlined">edit</span>
+                            <span class="btn-label">Editar</span>
+                        </button>
+
+                        <button class="action-btn" [class.block]="!row.blocked" [class.unblock]="row.blocked"
+                            [title]="row.blocked ? 'Desbloquear usuario' : 'Bloquear usuario'" (click)="onToggle(row)">
+                            <span class="material-symbols-outlined">
+                                {{ row.blocked ? 'lock_open' : 'lock' }}
+                            </span>
+                            <span class="btn-label">{{ row.blocked ? 'Desbloquear' : 'Bloquear' }}</span>
+                        </button>
+
+                        <button class="action-btn delete" title="Eliminar usuario" (click)="onDelete(row)">
+                            <span class="material-symbols-outlined">delete</span>
+                            <span class="btn-label">Eliminar</span>
+                        </button>
+
+                    </div>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Footer paginación -->
+    <div class="table-footer">
+        <span>Mostrando {{ usuarios.length }} de {{ totalUsuarios }} usuarios</span>
+        <div class="pagination">
+            <button class="page-btn" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button *ngFor="let p of pages" class="page-btn" [class.active]="p === currentPage"
+                (click)="onPageChange(p)">{{ p }}</button>
+            <button class="page-btn" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+    </div>
+</div>

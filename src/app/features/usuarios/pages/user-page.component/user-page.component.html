@@ -1,0 +1,59 @@
+<!--New codigo refactor -->
+
+<div class="page-layout">
+
+    <!-- SIDEBAR -->
+    <app-aside-super-admin-menu />
+
+    <!-- MAIN -->
+    <main class="main" [class.expanded]="sidebarSvc.isExpanded()">
+
+        <!-- Contenido principal -->
+
+        <div class="page-content">
+
+            <app-topbar />
+
+
+            <!-- Encabezado -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Usuarios</h1>
+                    <p class="page-subtitle">Gestión de cuentas y roles del sistema</p>
+                </div>
+                <button class="btn-new" (click)="onNewUsuario()">
+                    <span class="material-symbols-outlined">person_add</span>
+                    Nuevo usuario
+                </button>
+            </div>
+
+            <!-- Error de carga -->
+            <div class="error-banner" *ngIf="errorCarga">
+                <span class="material-symbols-outlined">error</span>
+                No se pudieron cargar los usuarios. Intenta de nuevo.
+                <button (click)="cargarUsuarios()">Reintentar</button>
+            </div>
+
+            <!-- Skeleton / cargando -->
+            <div class="skeleton-wrap" *ngIf="cargando">
+                <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
+            </div>
+
+            <!-- Tabla -->
+            <app-usuarios-table *ngIf="!cargando && !errorCarga" [usuarios]="usuarios" [totalUsuarios]="totalUsuarios"
+                [currentPage]="currentPage" [totalPages]="totalPages" (viewUsuario)="onView($event)"
+                (editUsuario)="onEdit($event)" (toggleBloqueo)="onToggleBloqueo($event)"
+                (deleteUsuario)="onDelete($event)" (pageChange)="onPageChange($event)" />
+
+            <!-- Estado vacío -->
+            <div class="empty-state" *ngIf="!cargando && !errorCarga && usuarios.length === 0">
+                <span class="material-symbols-outlined">group</span>
+                <p>No hay usuarios registrados todavía.</p>
+                <button class="btn-new" (click)="onNewUsuario()">Crear primer usuario</button>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>

@@ -30,7 +30,7 @@
         <span class="section-label">Principal</span>
       </div>
 
-      <a class="nav-item" routerLink="/super/dashboard" routerLinkActive="active">
+      <a class="nav-item" routerLink="/dashboard" routerLinkActive="active">
         <img src="icons-superAdmin/homeIcon.svg" class="icon" />
         <span>Inicio</span>
       </a>
@@ -43,7 +43,7 @@
       <!-- ESTANCIAS -->
       <div class="estancias-wrapper" (mouseenter)="openEstancias()" (mouseleave)="closeEstancias()">
 
-        <a class="nav-item expandable" routerLink="estancias" routerLinkActive="active" (click)="toggleEstancias()">
+        <a class="nav-item expandable" routerLink="/estancias" routerLinkActive="active" (click)="toggleEstancias()">
 
           <div class="nav-main">
             <img src="icons-superAdmin/estanciasIcon.svg" class="icon" />
@@ -57,13 +57,13 @@
 
         <!-- SUBMENU -->
         <div class="submenu" *ngIf="estanciasOpen">
-          <a class="nav-subitem" routerLink="/super/estancias/operar" routerLinkActive="active">
+          <a class="nav-subitem" routerLink="/estancias/operar" routerLinkActive="active">
 
             <img src="icons-superAdmin/operarEstanciaIcon.svg" class="icon-sub" />
             <span>Operar Estancia</span>
           </a>
 
-          <a class="nav-subitem" routerLink="/super/estancias/inactivas" routerLinkActive="active">
+          <a class="nav-subitem" routerLink="/estancias/inactivas" routerLinkActive="active">
 
             <img src="icons-superAdmin/estanciasInactivas.svg" class="icon-sub" />
             <span>Estancias Inactivas</span>
@@ -72,8 +72,8 @@
 
       </div>
 
-      <!-- OTROS -->
-      <a class="nav-item" routerLink="/super/usuarios" routerLinkActive="active">
+      <!-- Usuarios -->
+      <a class="nav-item" routerLink="/usuarios" routerLinkActive="active">
         <img src="icons-superAdmin/usersIcon.svg" class="icon" />
         <span>Usuarios</span>
       </a>
