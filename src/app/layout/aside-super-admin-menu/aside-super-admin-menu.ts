@@ -1,4 +1,3 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -6,6 +5,8 @@ import { map } from 'rxjs/operators';
 import { SidebarService } from './sidebar.service';
 import { AuthService } from '../../features/auth/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { Component, ChangeDetectionStrategy, inject, ElementRef, effect } from '@angular/core';
+
 
 @Component({
   selector: 'app-aside-super-admin-menu',
@@ -16,6 +17,18 @@ import { NotificationService } from '../../core/services/notification.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AsideSuperAdminMenu {
+
+  private host = inject(ElementRef<HTMLElement>);
+
+  constructor() {
+    effect(() => {
+      const sidebar = this.host.nativeElement.querySelector('.sidebar');
+      if (sidebar) {
+        sidebar.classList.toggle('expanded', this.sidebarSvc.isExpanded());
+      }
+    });
+  }
+
 
   /* ========================
       SERVICIOS

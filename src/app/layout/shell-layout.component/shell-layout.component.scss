@@ -1,32 +1,26 @@
-/* ===============================
-   LAYOUT BASE
-=================================*/
-.page-layout {
+.shell-wrapper {
   display: flex;
   min-height: 100vh;
-  background: var(--bg);
 }
 
-/* ===============================
-   MAIN CONTENT
-=================================*/
-.main {
+.shell-main {
   flex: 1;
-  min-width: 0;
-
-  /* 🔥 compensación sidebar fixed */
-  margin-left: var(--sidebar-mini);
-
+  display: flex;
+  flex-direction: column;
+  margin-left: 64px;
   transition: margin-left 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 
   &.expanded {
-    margin-left: var(--sidebar-w);
+    margin-left: 230px;
   }
 }
 
-/* ===============================
-   INNER CONTENT
-=================================*/
-.content {
-  padding: 1.5rem;
+@media (max-width: 56.25rem) {
+  .shell-main {
+    margin-left: 64px;
+
+    &.expanded {
+      margin-left: 230px;
+    }
+  }
 }

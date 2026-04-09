@@ -1,17 +1,6 @@
-<div class="page-layout">
-
+<div class="shell-wrapper">
     <app-aside-super-admin-menu />
-
-    <main class="main" [class.expanded]="sidebarSvc.isExpanded()">
-
-        <app-topbar [action]="action" (actionClick)="actionClick.emit()" />
-
-        <div class="content">
-            <ng-content />
-        </div>
-
-    </main>
-
+    <div class="shell-main" [class.expanded]="sidebarSvc.isExpanded()">
+        <ng-content />
+    </div>
 </div>
-
-<ng-content select="[slot=modals]" />
