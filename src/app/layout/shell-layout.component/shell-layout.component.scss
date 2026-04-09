@@ -1,0 +1,32 @@
+/* ===============================
+   LAYOUT BASE
+=================================*/
+.page-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* ===============================
+   MAIN CONTENT
+=================================*/
+.main {
+  flex: 1;
+  min-width: 0;
+
+  /* 🔥 compensación sidebar fixed */
+  margin-left: var(--sidebar-mini);
+
+  transition: margin-left 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.expanded {
+    margin-left: var(--sidebar-w);
+  }
+}
+
+/* ===============================
+   INNER CONTENT
+=================================*/
+.content {
+  padding: 1.5rem;
+}

@@ -1,0 +1,17 @@
+<div class="page-layout">
+
+    <app-aside-super-admin-menu />
+
+    <main class="main" [class.expanded]="sidebarSvc.isExpanded()">
+
+        <app-topbar [action]="action" (actionClick)="actionClick.emit()" />
+
+        <div class="content">
+            <ng-content />
+        </div>
+
+    </main>
+
+</div>
+
+<ng-content select="[slot=modals]" />
