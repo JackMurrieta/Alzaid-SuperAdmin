@@ -3,9 +3,14 @@
 }
 
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 200; // arriba del contenido
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 0.875rem 2.25rem;
   background: var(--surface);
   border-bottom: 1px solid var(--border);

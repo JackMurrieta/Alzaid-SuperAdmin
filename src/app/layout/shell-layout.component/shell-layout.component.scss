@@ -1,26 +1,39 @@
-.shell-wrapper {
+.layout {
   display: flex;
   min-height: 100vh;
+  background: var(--bg);
 }
 
-.shell-main {
+/* ── CONTENEDOR DERECHO ── */
+.layout-body {
   flex: 1;
   display: flex;
   flex-direction: column;
+
   margin-left: 64px;
   transition: margin-left 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &.expanded {
-    margin-left: 230px;
-  }
 }
 
-@media (max-width: 56.25rem) {
-  .shell-main {
-    margin-left: 64px;
+.layout-body.expanded {
+  margin-left: 230px;
+}
 
-    &.expanded {
-      margin-left: 230px;
-    }
-  }
+/* ── TOPBAR (INDEPENDIENTE) ── */
+.topbar-slot {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  /* IMPORTANTE: sin padding heredado */
+  width: 100%;
+}
+
+/* ── CONTENIDO ── */
+.main {
+  flex: 1;
+  padding: 2rem 2.25rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }

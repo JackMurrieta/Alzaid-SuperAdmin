@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { AsideSuperAdminMenu } from '../../../../layout/aside-super-admin-menu/aside-super-admin-menu';
-/*Crear tpBar */
+// user-page.component.ts
+import { Component, inject, OnInit } from '@angular/core';
+import { ShellLayoutComponent } from '../../../../layout/shell-layout.component/shell-layout.component';
 import { TopbarComponent } from '../../../../layout/topbar/topbar.component';
 import { UsuariosTableComponent } from '../../components/user-table.component/user-table.component';
-import { SidebarService } from '../../../../layout/aside-super-admin-menu/sidebar.service';
 import { UsuariosService } from '../../service/usuarios.service';
 import { User } from '../../models/user.model';
 
@@ -13,8 +10,7 @@ import { User } from '../../models/user.model';
   selector: 'app-usuarios-page',
   standalone: true,
   imports: [
-    CommonModule,
-    AsideSuperAdminMenu,
+    ShellLayoutComponent,
     TopbarComponent,
     UsuariosTableComponent,
   ],
@@ -23,14 +19,7 @@ import { User } from '../../models/user.model';
 })
 export class UsersPageComponent implements OnInit {
 
-  constructor(
-    public sidebarSvc: SidebarService,
-    private usuariosSvc: UsuariosService,
-  ) { }
-
-  ngOnInit(): void {
-    this.cargarUsuarios();
-  }
+  private usuariosSvc = inject(UsuariosService);
 
   // ── Estado ──
   cargando = false;
@@ -46,7 +35,10 @@ export class UsersPageComponent implements OnInit {
   selectedUsuario: User | null = null;
   showViewModal = false;
 
-  // ── GET /users ──
+  ngOnInit(): void {
+    this.cargarUsuarios();
+  }
+
   cargarUsuarios(): void {
     this.cargando = true;
     this.errorCarga = false;
@@ -66,13 +58,11 @@ export class UsersPageComponent implements OnInit {
     //   }
     // });
 
-    // Datos de ejemplo hasta que el endpoint esté listo
     this.usuarios = [];
     this.totalUsuarios = 0;
     this.cargando = false;
   }
 
-  // ── Handlers tabla ──
   onView(usuario: User): void {
     this.selectedUsuario = usuario;
     this.showViewModal = true;
@@ -84,17 +74,14 @@ export class UsersPageComponent implements OnInit {
   }
 
   onEdit(usuario: User): void {
-    // TODO: abrir modal de edición
     console.log('Editar usuario:', usuario);
   }
 
   onToggleBloqueo(usuario: User): void {
-    // TODO: llamar endpoint PATCH /users/:id/block
     console.log(`${usuario.blocked ? 'Desbloquear' : 'Bloquear'} usuario:`, usuario);
   }
 
   onDelete(usuario: User): void {
-    // TODO: confirmar y llamar endpoint DELETE /users/:id
     console.log('Eliminar usuario:', usuario);
   }
 
@@ -103,6 +90,6 @@ export class UsersPageComponent implements OnInit {
   }
 
   onNewUsuario(): void {
-    // TODO: abrir modal de registro de usuario
+    // TODO: abrir modal de registro
   }
 }

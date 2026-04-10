@@ -33,19 +33,6 @@
   justify-content: space-between;
 }
 
-.page-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--navy);
-  margin: 0;
-}
-
-.page-subtitle {
-  font-size: 0.875rem;
-  color: var(--muted);
-  margin-top: 0.25rem;
-}
-
 /* ── BOTÓN NUEVO ── */
 .btn-new {
   display: inline-flex;
@@ -148,10 +135,5 @@
   .material-symbols-outlined {
     font-size: 3rem;
     opacity: 0.4;
-  }
-
-  p {
-    font-size: 0.9375rem;
-    margin: 0;
   }
 }

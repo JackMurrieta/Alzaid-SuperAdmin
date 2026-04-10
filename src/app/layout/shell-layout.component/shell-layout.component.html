@@ -1,6 +1,20 @@
-<div class="shell-wrapper">
+<div class="layout">
+
+    <!-- Sidebar -->
     <app-aside-super-admin-menu />
-    <div class="shell-main" [class.expanded]="sidebarSvc.isExpanded()">
-        <ng-content />
+
+    <!-- Área derecha -->
+    <div class="layout-body" [class.expanded]="sidebarSvc.isExpanded()">
+
+        <!-- Topbar independiente -->
+        <div class="topbar-slot">
+            <ng-content select="app-topbar" />
+        </div>
+
+        <!-- Contenido -->
+        <main class="main">
+            <ng-content />
+        </main>
+
     </div>
 </div>
