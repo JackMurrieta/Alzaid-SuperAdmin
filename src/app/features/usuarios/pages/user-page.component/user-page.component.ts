@@ -1,8 +1,8 @@
-// user-page.component.ts
 import { Component, inject, OnInit } from '@angular/core';
 import { ShellLayoutComponent } from '../../../../layout/shell-layout.component/shell-layout.component';
 import { TopbarComponent } from '../../../../layout/topbar/topbar.component';
 import { UsuariosTableComponent } from '../../components/user-table.component/user-table.component';
+import { UserFormComponent } from '../../components/user-form.component/user-form.component';
 import { UsuariosService } from '../../service/usuarios.service';
 import { User } from '../../models/user.model';
 
@@ -13,6 +13,7 @@ import { User } from '../../models/user.model';
     ShellLayoutComponent,
     TopbarComponent,
     UsuariosTableComponent,
+    UserFormComponent,
   ],
   templateUrl: './user-page.component.html',
   styleUrl: './user-page.component.scss',
@@ -21,19 +22,18 @@ export class UsersPageComponent implements OnInit {
 
   private usuariosSvc = inject(UsuariosService);
 
-  // ── Estado ──
   cargando = false;
   errorCarga = false;
 
-  // ── Datos ──
   usuarios: User[] = [];
   totalUsuarios = 0;
   currentPage = 1;
   totalPages = 1;
 
-  // ── Modal ver ──
   selectedUsuario: User | null = null;
   showViewModal = false;
+
+  mostrarModalNuevoUsuario = false;
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -45,7 +45,7 @@ export class UsersPageComponent implements OnInit {
 
     // TODO: descomentar cuando el endpoint esté listo
     // this.usuariosSvc.getUsuarios().subscribe({
-    //   next: (data: User[]) => {
+    //   next: (data) => {
     //     this.usuarios      = data;
     //     this.totalUsuarios = data.length;
     //     this.totalPages    = Math.ceil(data.length / 10) || 1;
@@ -90,6 +90,15 @@ export class UsersPageComponent implements OnInit {
   }
 
   onNewUsuario(): void {
-    // TODO: abrir modal de registro
+    this.mostrarModalNuevoUsuario = true;
+  }
+
+  onUsuarioCreado(usuario: User): void {
+    this.mostrarModalNuevoUsuario = false;
+    this.cargarUsuarios();
+  }
+
+  onModalCancelado(): void {
+    this.mostrarModalNuevoUsuario = false;
   }
 }

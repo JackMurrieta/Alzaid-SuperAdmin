@@ -1,7 +1,6 @@
-<!-- user-page.component.html -->
 <app-shell-layout>
 
-    <app-topbar />
+    <app-topbar topbar />
 
     <!-- Encabezado -->
     <div class="page-header">
@@ -24,7 +23,7 @@
     </div>
     }
 
-    <!-- Skeleton / cargando -->
+    <!-- Skeleton -->
     @if (cargando) {
     <div class="skeleton-wrap">
         @for (i of [1,2,3,4,5]; track i) {
@@ -34,7 +33,7 @@
     }
 
     <!-- Tabla -->
-    @if (!cargando && !errorCarga) {
+    @if (!cargando && !errorCarga && usuarios.length > 0) {
     <app-usuarios-table [usuarios]="usuarios" [totalUsuarios]="totalUsuarios" [currentPage]="currentPage"
         [totalPages]="totalPages" (viewUsuario)="onView($event)" (editUsuario)="onEdit($event)"
         (toggleBloqueo)="onToggleBloqueo($event)" (deleteUsuario)="onDelete($event)"
@@ -51,3 +50,12 @@
     }
 
 </app-shell-layout>
+
+<!-- Modal fuera del shell para evitar conflictos de z-index -->
+@if (mostrarModalNuevoUsuario) {
+<div class="modal-overlay" (click)="onModalCancelado()">
+    <div (click)="$event.stopPropagation()">
+        <app-user-form (cancelar)="onModalCancelado()" (usuarioCreado)="onUsuarioCreado($event)" />
+    </div>
+</div>
+}

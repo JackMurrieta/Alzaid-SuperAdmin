@@ -1,1 +1,148 @@
-<p>user-form.component works!</p>
+<div class="modal">
+
+    <div class="modal-header">
+        <div>
+            <div class="modal-title">Registrar Usuario</div>
+            <div class="modal-subtitle">Los campos marcados con * son obligatorios</div>
+        </div>
+        <button class="modal-close" type="button" (click)="onCancel()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-body">
+
+        <!-- ── Información personal ── -->
+        <div class="form-section">
+            <div class="form-section-title">Información personal</div>
+            <div class="form-grid form-grid-3">
+
+                <div class="field">
+                    <label>Nombre <span class="req">*</span></label>
+                    <input type="text" formControlName="name" placeholder="Ej. Juan">
+                    @if (isInvalid('name')) {
+                    <span class="hint error">Este campo es obligatorio</span>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Apellido paterno <span class="req">*</span></label>
+                    <input type="text" formControlName="lastName" placeholder="Ej. Pérez">
+                    @if (isInvalid('lastName')) {
+                    <span class="hint error">Este campo es obligatorio</span>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Apellido materno <span class="opt">(opcional)</span></label>
+                    <input type="text" formControlName="lastNameSecond" placeholder="Ej. Rodríguez">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Credenciales de acceso ── -->
+        <div class="form-section">
+            <div class="form-section-title">Credenciales de acceso</div>
+            <div class="form-grid form-grid-2">
+
+                <div class="field">
+                    <label>Correo electrónico <span class="req">*</span></label>
+                    <input type="email" formControlName="email" placeholder="usuario@ejemplo.com">
+                    @if (isInvalid('email')) {
+                    <span class="hint error">Ingresa un email válido</span>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Nombre de usuario <span class="req">*</span></label>
+                    <input type="text" formControlName="username" placeholder="Ej. usuario123">
+                    @if (isInvalid('username')) {
+                    <span class="hint error">Este campo es obligatorio</span>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Contraseña <span class="req">*</span></label>
+                    <div class="input-with-status">
+                        <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                            placeholder="Mínimo 8 caracteres">
+                        <button type="button" class="toggle-pass" (click)="showPassword = !showPassword">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                @if (!showPassword) {
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                                } @else {
+                                <path
+                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                                <line x1="1" y1="1" x2="23" y2="23" />
+                                }
+                            </svg>
+                        </button>
+                    </div>
+                    @if (isInvalid('password')) {
+                    <span class="hint error">Mínimo 8 caracteres</span>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Teléfono <span class="req">*</span></label>
+                    <input type="tel" formControlName="phone" placeholder="Ej. 6441234567" maxlength="10">
+                    @if (isInvalid('phone')) {
+                    <span class="hint error">Ingresa un teléfono válido (10 dígitos)</span>
+                    }
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Rol y asignación ── -->
+        <div class="form-section">
+            <div class="form-section-title">Rol y asignación</div>
+            <div class="form-grid form-grid-2">
+
+                <div class="field">
+                    <label>Rol <span class="req">*</span></label>
+                    <select formControlName="role">
+                        <option value="">Seleccionar rol…</option>
+                        @for (r of roles; track r.value) {
+                        <option [value]="r.value">{{ r.label }}</option>
+                        }
+                    </select>
+                    @if (isInvalid('role')) {
+                    <span class="hint error">Selecciona un rol</span>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>ID de Centro <span class="opt">(opcional)</span></label>
+                    <input type="text" formControlName="centerId" placeholder="ID del centro asignado">
+                    <span class="hint">Solo si el usuario pertenece a una estancia</span>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+    <div class="modal-footer">
+        <button class="btn btn-ghost" type="button" (click)="onCancel()">Cancelar</button>
+        <button class="btn btn-primary" type="button" (click)="onSubmit()" [disabled]="form.invalid && formSubmitted">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                style="width:15px;height:15px">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Crear Usuario
+        </button>
+    </div>
+
+</div>
+
+<div class="toast" [class.show]="toastVisible">
+    <div class="toast-icon">✓</div>
+    <span>{{ toastMessage }}</span>
+</div>
