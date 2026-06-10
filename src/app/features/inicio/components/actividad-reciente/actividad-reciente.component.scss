@@ -1,0 +1,61 @@
+.card-actividad {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  max-width: 640px;
+
+  &__titulo {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+  }
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  padding: 0.85rem 0.75rem;
+  border-top: 1px solid #eceef1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:first-child {
+    border-top: none;
+  }
+
+  // resalta la actividad bajo el cursor
+  &:hover {
+    background-color: #f3f6fb;
+  }
+
+  &__fecha {
+    display: block;
+    font-size: 0.78rem;
+    color: #9aa3af;
+    margin-bottom: 0.2rem;
+  }
+
+  &__descripcion {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #374151;
+  }
+
+  &--vacio {
+    text-align: center;
+    color: #9aa3af;
+    cursor: default;
+    padding: 1.5rem 0;
+
+    &:hover {
+      background: transparent;
+    }
+  }
+}

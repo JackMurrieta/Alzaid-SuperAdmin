@@ -1,0 +1,14 @@
+<div class="card-actividad">
+  <h2 class="card-actividad__titulo">Actividad Reciente</h2>
+
+  <ul class="lista">
+    @for (act of vmActividades; track act.id) {
+      <li class="item">
+        <span class="item__fecha">{{ act.etiquetaFecha }}</span>
+        <p class="item__descripcion">{{ act.descripcion }}</p>
+      </li>
+    } @empty {
+      <li class="item item--vacio">No hay actividad reciente</li>
+    }
+  </ul>
+</div>
