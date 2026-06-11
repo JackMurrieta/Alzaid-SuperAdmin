@@ -1,0 +1,25 @@
+<app-shell-layout>
+    <app-topbar topbar />
+    <section class="dashboard">
+        <h1 class="dashboard__titulo">Dashboard Global</h1>
+
+        <!-- Fila 1: KPIs -->
+        <div class="dashboard__kpis">
+            <app-card-inicio titulo="Estancias Activas" [cantidad]="resumen.estanciasActivas"
+                color="#2f6bff"></app-card-inicio>
+            <app-card-inicio titulo="Pacientes Totales" [cantidad]="resumen.pacientesTotales"
+                color="#2f6bff"></app-card-inicio>
+            <app-card-inicio titulo="Administradores" [cantidad]="resumen.administradores"
+                color="#2f6bff"></app-card-inicio>
+            <app-card-inicio titulo="Alertas" [cantidad]="resumen.alertas" color="#dc2626"></app-card-inicio>
+        </div>
+
+        <!-- Fila 2: tabla + actividad reciente -->
+        <div class="dashboard__contenido">
+            <app-tabla-estancias [estancias]="estancias"></app-tabla-estancias>
+            <!-- aquí va <app-actividad-reciente> cuando lo armemos -->
+            <app-actividad-reciente></app-actividad-reciente>
+        </div>
+
+    </section>
+</app-shell-layout>

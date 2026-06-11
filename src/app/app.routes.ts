@@ -13,6 +13,14 @@ export const routes: Routes = [
     canActivate: [noAuthGuard],
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
   },
+
+  {
+    path: 'inicio',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/inicio/pages/inicio-page.component')
+      .then(m => m.InicioPageComponent),
+  },
+
   {
     path: 'estancias',
     canActivate: [authGuard],
